@@ -13,6 +13,7 @@ public interface IConstants {
     String EXT_VCF = ".vcf";
 
     String REF_USERS = "Users";
+    String PENDING_TICKET = "pending_ticket";
     String REF_CHATS = "Chats_v2";
     String REF_UPLOAD = "Uploads";
     String REF_BLOCK_USERS = "BlockUsers";
@@ -37,6 +38,8 @@ public interface IConstants {
     String IMG_DEFAULTS = "default";
 
     String EXTRA_USER_ID = "userId";
+    String BROADCAST_PLAY_RECORDING_EVENT = "com.app.abcdadmin.PLAY_RECORDING_EVENT";
+
 
     String EXTRA_SENDER = "sender";
     String EXTRA_RECEIVER = "receiver";
@@ -138,7 +141,6 @@ public interface IConstants {
     String BROADCAST_DOWNLOAD_EVENT = "com.bytesbee.firebase.chat.activities.DOWNLOAD_EVENT";
 
     String PLAYING_DATA = "playing_data";
-    String BROADCAST_PLAY_RECORDING_EVENT = "com.bytesbee.firebase.chat.activities.PLAY_RECORDING_EVENT";
 
     int STARTED = 0;
     int COMPLETED = 1;

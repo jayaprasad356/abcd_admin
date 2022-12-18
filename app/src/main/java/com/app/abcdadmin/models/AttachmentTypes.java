@@ -17,6 +17,8 @@ import android.provider.MediaStore;
 import androidx.annotation.IntDef;
 import androidx.annotation.RequiresApi;
 
+import com.app.abcdadmin.managers.Utils;
+
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
@@ -64,6 +66,19 @@ public class AttachmentTypes {
             default:
                 return "none";
         }
+    }
+    public static String getDirectoryByType(String type) {
+        switch (type) {
+            case TYPE_AUDIO:
+            case TYPE_RECORDING:
+                return Utils.getMusicFolder();
+            case TYPE_VIDEO:
+                return Utils.getMoviesFolder();
+            case TYPE_DOCUMENT:
+            case TYPE_CONTACT:
+                return Utils.getDownloadFolder();
+        }
+        return Utils.getDownloadFolder();
     }
 
     public static String getTypeName(String attachmentType) {

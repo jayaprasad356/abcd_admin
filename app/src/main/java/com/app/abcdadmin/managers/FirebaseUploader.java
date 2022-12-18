@@ -4,6 +4,8 @@ import android.net.Uri;
 
 import androidx.annotation.NonNull;
 
+import com.app.abcdadmin.async.BaseTask;
+import com.app.abcdadmin.async.TaskRunner;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -29,34 +31,34 @@ public class FirebaseUploader {
         this.uploadListener = uploadListener;
     }
 
-//    public void uploadFile(final File file) {
-//        final BaseTask baseTask = new BaseTask() {
-//            @Override
-//            public void setUiForLoading() {
-//                super.setUiForLoading();
-//            }
-//
-//            @Override
-//            public Object call() {
-//                try {
-//                    fileUri = Uri.fromFile(file);
-//                } catch (Exception e) {
-//                    Utils.getErrors(e);
-//                }
-//                checkIfExists();
-//                return "";
-//            }
-//
-//            @Override
-//            public void setDataAfterLoading(Object result) {
-//
-//            }
-//
-//        };
-//
-//        TaskRunner runner = new TaskRunner();
-//        runner.executeAsync(baseTask);
-//    }
+    public void uploadFile(final File file) {
+        final BaseTask baseTask = new BaseTask() {
+            @Override
+            public void setUiForLoading() {
+                super.setUiForLoading();
+            }
+
+            @Override
+            public Object call() {
+                try {
+                    fileUri = Uri.fromFile(file);
+                } catch (Exception e) {
+                    Utils.getErrors(e);
+                }
+                checkIfExists();
+                return "";
+            }
+
+            @Override
+            public void setDataAfterLoading(Object result) {
+
+            }
+
+        };
+
+        TaskRunner runner = new TaskRunner();
+        runner.executeAsync(baseTask);
+    }
 
     private void checkIfExists() {
         uploadRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {

@@ -84,7 +84,6 @@ public class ChatsFragment extends BaseFragment {
         //final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         //currentId = Objects.requireNonNull(firebaseUser).getUid();
         currentId = CURRENT_ID;
-
         userList = new ArrayList<>();
 
         Query query = FirebaseDatabase.getInstance().getReference(REF_CHATS).child(currentId);

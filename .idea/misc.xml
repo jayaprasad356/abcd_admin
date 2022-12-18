@@ -3,19 +3,54 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Studio Projects/AbcdAdmin/app/src/main/res/drawable/background_link_preview.xml" value="0.129" />
+        <entry key="..\:/Studio Projects/AbcdAdmin/app/src/main/res/drawable/bg_chip_state_list.xml" value="0.129" />
+        <entry key="..\:/Studio Projects/AbcdAdmin/app/src/main/res/drawable/bg_right.xml" value="0.129" />
+        <entry key="..\:/Studio Projects/AbcdAdmin/app/src/main/res/drawable/btn_attach_1.xml" value="0.129" />
+        <entry key="..\:/Studio Projects/AbcdAdmin/app/src/main/res/drawable/btn_attach_2.xml" value="0.129" />
+        <entry key="..\:/Studio Projects/AbcdAdmin/app/src/main/res/drawable/btn_attach_3.xml" value="0.129" />
+        <entry key="..\:/Studio Projects/AbcdAdmin/app/src/main/res/drawable/btn_white.xml" value="0.129" />
         <entry key="..\:/Studio Projects/AbcdAdmin/app/src/main/res/drawable/circle_color.xml" value="0.129" />
         <entry key="..\:/Studio Projects/AbcdAdmin/app/src/main/res/drawable/circle_my_selector.xml" value="0.129" />
         <entry key="..\:/Studio Projects/AbcdAdmin/app/src/main/res/drawable/ed_bg.xml" value="0.129" />
+        <entry key="..\:/Studio Projects/AbcdAdmin/app/src/main/res/drawable/ic_arrow_back.xml" value="0.129" />
+        <entry key="..\:/Studio Projects/AbcdAdmin/app/src/main/res/drawable/ic_attach_camera.xml" value="0.129" />
+        <entry key="..\:/Studio Projects/AbcdAdmin/app/src/main/res/drawable/ic_attach_file.xml" value="0.129" />
         <entry key="..\:/Studio Projects/AbcdAdmin/app/src/main/res/drawable/ic_chat.xml" value="0.129" />
+        <entry key="..\:/Studio Projects/AbcdAdmin/app/src/main/res/drawable/ic_check_delivery.xml" value="0.129" />
+        <entry key="..\:/Studio Projects/AbcdAdmin/app/src/main/res/drawable/ic_check_read.xml" value="0.129" />
+        <entry key="..\:/Studio Projects/AbcdAdmin/app/src/main/res/drawable/ic_double_arrow.xml" value="0.129" />
+        <entry key="..\:/Studio Projects/AbcdAdmin/app/src/main/res/drawable/ic_insert_emoticon_gray.xml" value="0.129" />
+        <entry key="..\:/Studio Projects/AbcdAdmin/app/src/main/res/drawable/ic_keyboard_24dp.xml" value="0.184" />
+        <entry key="..\:/Studio Projects/AbcdAdmin/app/src/main/res/drawable/ic_send.xml" value="0.129" />
         <entry key="..\:/Studio Projects/AbcdAdmin/app/src/main/res/drawable/ic_small_audio.xml" value="0.129" />
+        <entry key="..\:/Studio Projects/AbcdAdmin/app/src/main/res/drawable/ic_small_image.xml" value="0.129" />
         <entry key="..\:/Studio Projects/AbcdAdmin/app/src/main/res/drawable/ic_small_photo.xml" value="0.129" />
+        <entry key="..\:/Studio Projects/AbcdAdmin/app/src/main/res/drawable/ic_small_video_white.xml" value="0.129" />
+        <entry key="..\:/Studio Projects/AbcdAdmin/app/src/main/res/drawable/progressbar.xml" value="0.129" />
+        <entry key="..\:/Studio Projects/AbcdAdmin/app/src/main/res/drawable/recv_ic_mic_white.xml" value="0.129" />
         <entry key="..\:/Studio Projects/AbcdAdmin/app/src/main/res/drawable/rounded_counter.xml" value="0.129" />
+        <entry key="..\:/Studio Projects/AbcdAdmin/app/src/main/res/drawable/rounded_date.xml" value="0.129" />
+        <entry key="..\:/Studio Projects/AbcdAdmin/app/src/main/res/drawable/vp_main_layout_bg.xml" value="0.129" />
+        <entry key="..\:/Studio Projects/AbcdAdmin/app/src/main/res/drawable/vp_vertical_align_bottom.xml" value="0.129" />
+        <entry key="..\:/Studio Projects/AbcdAdmin/app/src/main/res/layout/activity_image_viewer.xml" value="0.16145833333333334" />
         <entry key="..\:/Studio Projects/AbcdAdmin/app/src/main/res/layout/activity_login.xml" value="0.22" />
         <entry key="..\:/Studio Projects/AbcdAdmin/app/src/main/res/layout/activity_main.xml" value="0.17552083333333332" />
+        <entry key="..\:/Studio Projects/AbcdAdmin/app/src/main/res/layout/activity_message.xml" value="0.17552083333333332" />
+        <entry key="..\:/Studio Projects/AbcdAdmin/app/src/main/res/layout/dailog_layout.xml" value="0.144017094017094" />
         <entry key="..\:/Studio Projects/AbcdAdmin/app/src/main/res/layout/dialog_custom.xml" value="0.17552083333333332" />
         <entry key="..\:/Studio Projects/AbcdAdmin/app/src/main/res/layout/fragment_base.xml" value="0.16145833333333334" />
         <entry key="..\:/Studio Projects/AbcdAdmin/app/src/main/res/layout/fragment_chats.xml" value="0.17552083333333332" />
+        <entry key="..\:/Studio Projects/AbcdAdmin/app/src/main/res/layout/fragment_pending_ticket.xml" value="0.3333333333333333" />
+        <entry key="..\:/Studio Projects/AbcdAdmin/app/src/main/res/layout/include_attachment_view.xml" value="0.17552083333333332" />
+        <entry key="..\:/Studio Projects/AbcdAdmin/app/src/main/res/layout/list_chat_right.xml" value="0.1" />
+        <entry key="..\:/Studio Projects/AbcdAdmin/app/src/main/res/layout/list_tickets.xml" value="0.22" />
         <entry key="..\:/Studio Projects/AbcdAdmin/app/src/main/res/layout/list_users.xml" value="0.22" />
+        <entry key="..\:/Studio Projects/AbcdAdmin/app/src/main/res/layout/vp_audio_view_headset.xml" value="0.3333333333333333" />
+        <entry key="..\:/Studio Projects/AbcdAdmin/app/src/main/res/layout/vp_recording_view_left.xml" value="0.17552083333333332" />
+        <entry key="..\:/Studio Projects/AbcdAdmin/app/src/main/res/layout/vp_recording_view_right.xml" value="0.1" />
+        <entry key="..\:/Studio Projects/AbcdAdmin/app/src/main/res/layout/widget_chat_left.xml" value="0.17552083333333332" />
+        <entry key="..\:/Studio Projects/AbcdAdmin/app/src/main/res/layout/widget_chat_right.xml" value="0.17552083333333332" />
       </map>
     </option>
   </component>

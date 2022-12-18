@@ -1,6 +1,10 @@
 package com.app.abcdadmin.managers;
 
 
+import static com.app.abcdadmin.constants.IConstants.EXTRA_GROUP_NAME;
+import static com.app.abcdadmin.constants.IConstants.EXTRA_IMGPATH;
+import static com.app.abcdadmin.constants.IConstants.EXTRA_USERNAME;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -13,6 +17,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.core.app.ActivityOptionsCompat;
+
+import com.app.abcdadmin.ImageViewerActivity;
+import com.app.abcdadmin.R;
 
 import java.io.Serializable;
 
@@ -67,6 +74,22 @@ public class Screens {
             }
         } catch (Exception e) {
             Utils.getErrors(e);
+        }
+    }
+    public void openFullImageViewActivity(final View view, final String imgPath, final String username) {
+        openFullImageViewActivity(view, imgPath, "", username);
+    }
+
+    public void openFullImageViewActivity(final View view, final String imgPath, final String groupName, final String username) {
+        final Intent intent = new Intent(context, ImageViewerActivity.class);
+        intent.putExtra(EXTRA_IMGPATH, imgPath);
+        intent.putExtra(EXTRA_GROUP_NAME, groupName);
+        intent.putExtra(EXTRA_USERNAME, username);
+        try {
+            ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation((Activity) context, view, context.getString(R.string.app_name));
+            context.startActivity(intent, options.toBundle());
+        } catch (Exception e) {
+            context.startActivity(intent);
         }
     }
 

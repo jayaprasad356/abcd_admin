@@ -51,7 +51,7 @@ public class MainActivity extends BaseActivity{
     private TextView mTxtUsername;
     private ViewPager2 mViewPager;
     private long exitTime = 0;
-    Fragment chatFragment;
+    Fragment chatFragment,pendingTicketFragment;
     public static FragmentManager fm = null;
 
 
@@ -70,41 +70,10 @@ public class MainActivity extends BaseActivity{
 
 
 
-        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
         chatFragment = new ChatsFragment();
-        fm.beginTransaction().replace(R.id.container, chatFragment).commit();
-        //reference = FirebaseDatabase.getInstance().getReference(REF_USERS).child(firebaseUser.getUid());
-//        reference.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                try {
-//                    if (dataSnapshot.hasChildren()) {
-//                        final User user = dataSnapshot.getValue(User.class);
-//                        assert user != null;
-//                        mTxtUsername.setText(user.getUsername());
-//                        if (user.getGenders() == GEN_UNSPECIFIED) {
-//                            Utils.selectGenderPopup(mActivity, firebaseUser.getUid(), GEN_UNSPECIFIED);
-//                        }
-//
-//                        Utils.setProfileImage(getApplicationContext(), user.getMyImg(), mImageView);
-//                    }
-//                } catch (Exception ignored) {
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
-//        mImageView.setOnClickListener(new SingleClickListener() {
-//            @Override
-//            public void onClickView(View v) {
-//                mViewPager.setCurrentItem(2);
-//            }
-//        });
-
+        pendingTicketFragment = new PendingTicketFragment();
+        fm.beginTransaction().replace(R.id.container, pendingTicketFragment).commit();
 
 
     }
@@ -114,38 +83,6 @@ public class MainActivity extends BaseActivity{
     protected void onActivityResult(int requestCode, int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
     }
-
-//    public static void applyFontToMenu(Menu m, Context mContext) {
-//        for (int i = 0; i < m.size(); i++) {
-//            applyFontToMenuItem(m.getItem(i), mContext);
-//        }
-//    }
-//
-//    public static void applyFontToMenuItem(MenuItem mi, Context mContext) {
-//        final SpannableString mNewTitle = new SpannableString(mi.getTitle());
-//        mNewTitle.setSpan(new CustomTypefaceSpan("", Utils.getRegularFont(mContext)), ZERO, mNewTitle.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-//        mi.setTitle(mNewTitle);
-//    }
-
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.menu, menu);
-//        applyFontToMenu(menu, this);
-//        return true;
-//    }
-
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        final int itemId = item.getItemId();
-//        if (itemId == R.id.itemSettings) {
-//            screens.openSettingsActivity();
-//            return true;
-//        } else if (itemId == R.id.itemLogout) {
-//            Utils.logout(mActivity);
-//            return true;
-//        }
-//        return true;
-//    }
 
     @Override
     public void onBackPressed() {

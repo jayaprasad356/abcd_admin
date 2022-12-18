@@ -25,7 +25,6 @@ public class BaseActivity extends AppCompatActivity {
     public FirebaseAuth auth; //Auth init
     public FirebaseAuth.AuthStateListener authStateListener;
     public DatabaseReference reference; //Database related
-    public FirebaseUser firebaseUser; //Current User
     public Screens screens;
     public ImageView imgBack;
 
