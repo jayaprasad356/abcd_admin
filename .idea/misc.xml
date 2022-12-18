@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Studio Projects/AbcdAdmin/app/src/main/res/drawable/circle_color.xml" value="0.129" />
+        <entry key="..\:/Studio Projects/AbcdAdmin/app/src/main/res/drawable/circle_my_selector.xml" value="0.129" />
+        <entry key="..\:/Studio Projects/AbcdAdmin/app/src/main/res/drawable/ed_bg.xml" value="0.129" />
+        <entry key="..\:/Studio Projects/AbcdAdmin/app/src/main/res/drawable/ic_chat.xml" value="0.129" />
+        <entry key="..\:/Studio Projects/AbcdAdmin/app/src/main/res/drawable/ic_small_audio.xml" value="0.129" />
+        <entry key="..\:/Studio Projects/AbcdAdmin/app/src/main/res/drawable/ic_small_photo.xml" value="0.129" />
+        <entry key="..\:/Studio Projects/AbcdAdmin/app/src/main/res/drawable/rounded_counter.xml" value="0.129" />
+        <entry key="..\:/Studio Projects/AbcdAdmin/app/src/main/res/layout/activity_login.xml" value="0.22" />
+        <entry key="..\:/Studio Projects/AbcdAdmin/app/src/main/res/layout/activity_main.xml" value="0.17552083333333332" />
+        <entry key="..\:/Studio Projects/AbcdAdmin/app/src/main/res/layout/dialog_custom.xml" value="0.17552083333333332" />
+        <entry key="..\:/Studio Projects/AbcdAdmin/app/src/main/res/layout/fragment_base.xml" value="0.16145833333333334" />
+        <entry key="..\:/Studio Projects/AbcdAdmin/app/src/main/res/layout/fragment_chats.xml" value="0.17552083333333332" />
+        <entry key="..\:/Studio Projects/AbcdAdmin/app/src/main/res/layout/list_users.xml" value="0.22" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>

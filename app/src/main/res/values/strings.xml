@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">Abcd Admin</string>
+    <string name="cDescription" />
+    <string name="strUsername">USERNAME</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="strChats">Chats</string>
+    <string name="strNoChatCreated">No messages yet!</string>
+    <string name="strYouHaveNoChat">Looks like you haven\'t initiated a conversion</string>
+    <string name="strOneCount">9</string>
+    <string name="strAboutStatus">Hey! How are you?</string>
+    <string name="lblImage">Image</string>
+    <string name="lblAudio">Audio</string>
+    <string name="lblVideo">Video</string>
+    <string name="lblDocument">Document</string>
+    <string name="lblContact">Contact</string>
+    <string name="lblLocation">Location</string>
+    <string name="lblVoiceRecording">Voice recording</string>
+    <string name="msgNoMessage">No message!</string>
+
+</resources>
