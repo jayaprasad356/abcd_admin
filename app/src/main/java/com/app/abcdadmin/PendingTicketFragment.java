@@ -53,16 +53,11 @@ public class PendingTicketFragment extends Fragment {
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mRecyclerView.getContext(), layoutManager.getOrientation());
         mRecyclerView.addItemDecoration(dividerItemDecoration);
         readTickets();
-
-
-
-
         return root;
     }
 
     private void readTickets() {
         mTickets = new ArrayList<>();
-
         Query reference = Utils.getQueryPendingTicket();
         reference.keepSynced(true);
         reference.addValueEventListener(new ValueEventListener() {
