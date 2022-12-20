@@ -3,6 +3,7 @@ package com.app.abcdadmin.managers;
 import static android.os.Build.VERSION.SDK_INT;
 
 
+import static com.app.abcdadmin.constants.IConstants.CLOSED_TICKET;
 import static com.app.abcdadmin.constants.IConstants.EXTRA_IS_ONLINE;
 import static com.app.abcdadmin.constants.IConstants.EXTRA_LASTSEEN;
 import static com.app.abcdadmin.constants.IConstants.EXTRA_SEARCH;
@@ -13,6 +14,7 @@ import static com.app.abcdadmin.constants.IConstants.EXT_VCF;
 import static com.app.abcdadmin.constants.IConstants.FALSE;
 import static com.app.abcdadmin.constants.IConstants.IMG_DEFAULTS;
 import static com.app.abcdadmin.constants.IConstants.IMG_FOLDER;
+import static com.app.abcdadmin.constants.IConstants.OPENED_TICKET;
 import static com.app.abcdadmin.constants.IConstants.PENDING_TICKET;
 import static com.app.abcdadmin.constants.IConstants.REF_CHATS;
 import static com.app.abcdadmin.constants.IConstants.REF_OTHERS;
@@ -674,6 +676,15 @@ public class Utils {
     }
     public static Query getQueryPendingTicket() {
         return FirebaseDatabase.getInstance().getReference(PENDING_TICKET);
+    }
+    public static Query checKPendingTicketUser(String TicketId) {
+        return FirebaseDatabase.getInstance().getReference(PENDING_TICKET).child(TicketId);
+    }
+    public static Query getQueryOpenedTicket() {
+        return FirebaseDatabase.getInstance().getReference(OPENED_TICKET);
+    }
+    public static Query getQueryClosedTicket() {
+        return FirebaseDatabase.getInstance().getReference(CLOSED_TICKET);
     }
     public static void setProfileImage(Context context, String imgUrl, ImageView mImageView) {
         try {

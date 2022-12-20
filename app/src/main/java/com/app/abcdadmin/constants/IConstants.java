@@ -14,6 +14,8 @@ public interface IConstants {
 
     String REF_USERS = "Users";
     String PENDING_TICKET = "pending_ticket";
+    String OPENED_TICKET = "opened_ticket";
+    String CLOSED_TICKET = "closed_ticket";
     String REF_CHATS = "Chats_v2";
     String REF_UPLOAD = "Uploads";
     String REF_BLOCK_USERS = "BlockUsers";
@@ -38,6 +40,8 @@ public interface IConstants {
     String IMG_DEFAULTS = "default";
 
     String EXTRA_USER_ID = "userId";
+    String TICKET_ID = "ticket_id";
+    String NAME = "name";
     String BROADCAST_PLAY_RECORDING_EVENT = "com.app.abcdadmin.PLAY_RECORDING_EVENT";
 
 
@@ -131,6 +135,7 @@ public interface IConstants {
     String TYPE_TEXT = "TEXT";
     String TYPE_IMAGE = "IMAGE";
     String TYPE_AUDIO = "AUDIO";
+    String TYPE = "type";
     String TYPE_VIDEO = "VIDEO";
     String TYPE_CONTACT = "CONTACT";
     String TYPE_DOCUMENT = "DOCUMENT";

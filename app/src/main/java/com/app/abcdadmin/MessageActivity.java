@@ -1,25 +1,25 @@
 package com.app.abcdadmin;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.ContentResolver;
+import android.content.DialogInterface;
 import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 import android.webkit.MimeTypeMap;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.app.abcdadmin.adapters.MessageAdapters;
+import com.app.abcdadmin.constants.IConstants;
 import com.app.abcdadmin.fcm.APIService;
 import com.app.abcdadmin.files.FileUtils;
 import com.app.abcdadmin.files.MediaFile;
@@ -41,11 +41,10 @@ import com.vanniktech.emoji.EmojiPopup;
 import java.io.File;
 import java.util.ArrayList;
 
-import de.hdodenhof.circleimageview.CircleImageView;
-
 
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 import static com.app.abcdadmin.constants.IConstants.BROADCAST_DOWNLOAD_EVENT;
+import static com.app.abcdadmin.constants.IConstants.CLOSED_TICKET;
 import static com.app.abcdadmin.constants.IConstants.CURRENT_ID;
 import static com.app.abcdadmin.constants.IConstants.DELAY_ONE_SEC;
 import static com.app.abcdadmin.constants.IConstants.DOWNLOAD_DATA;
@@ -58,7 +57,6 @@ import static com.app.abcdadmin.constants.IConstants.EXTRA_ATTACH_PATH;
 import static com.app.abcdadmin.constants.IConstants.EXTRA_ATTACH_SIZE;
 import static com.app.abcdadmin.constants.IConstants.EXTRA_ATTACH_TYPE;
 import static com.app.abcdadmin.constants.IConstants.EXTRA_DATETIME;
-import static com.app.abcdadmin.constants.IConstants.EXTRA_ID;
 import static com.app.abcdadmin.constants.IConstants.EXTRA_IMGPATH;
 import static com.app.abcdadmin.constants.IConstants.EXTRA_MESSAGE;
 import static com.app.abcdadmin.constants.IConstants.EXTRA_RECEIVER;
@@ -73,12 +71,14 @@ import static com.app.abcdadmin.constants.IConstants.EXT_MP3;
 import static com.app.abcdadmin.constants.IConstants.EXT_VCF;
 import static com.app.abcdadmin.constants.IConstants.FALSE;
 import static com.app.abcdadmin.constants.IConstants.FCM_URL;
+import static com.app.abcdadmin.constants.IConstants.NAME;
 import static com.app.abcdadmin.constants.IConstants.ONE;
+import static com.app.abcdadmin.constants.IConstants.OPENED_TICKET;
+import static com.app.abcdadmin.constants.IConstants.PENDING_TICKET;
 import static com.app.abcdadmin.constants.IConstants.PERMISSION_AUDIO;
 import static com.app.abcdadmin.constants.IConstants.PERMISSION_CONTACT;
 import static com.app.abcdadmin.constants.IConstants.PERMISSION_DOCUMENT;
 import static com.app.abcdadmin.constants.IConstants.PERMISSION_VIDEO;
-import static com.app.abcdadmin.constants.IConstants.REF_BLOCK_USERS;
 import static com.app.abcdadmin.constants.IConstants.REF_CHATS;
 import static com.app.abcdadmin.constants.IConstants.REF_CHAT_ATTACHMENT;
 import static com.app.abcdadmin.constants.IConstants.REF_CHAT_PHOTO_UPLOAD;
@@ -91,8 +91,10 @@ import static com.app.abcdadmin.constants.IConstants.REQUEST_CODE_PLAY_SERVICES;
 import static com.app.abcdadmin.constants.IConstants.REQUEST_PERMISSION_RECORD;
 import static com.app.abcdadmin.constants.IConstants.SLASH;
 import static com.app.abcdadmin.constants.IConstants.STATUS_ONLINE;
+import static com.app.abcdadmin.constants.IConstants.TICKET_ID;
 import static com.app.abcdadmin.constants.IConstants.TRUE;
 import static com.app.abcdadmin.constants.IConstants.TWO;
+import static com.app.abcdadmin.constants.IConstants.TYPE;
 import static com.app.abcdadmin.constants.IConstants.TYPE_CONTACT;
 import static com.app.abcdadmin.constants.IConstants.TYPE_IMAGE;
 import static com.app.abcdadmin.constants.IConstants.TYPE_RECORDING;
@@ -112,12 +114,8 @@ import android.content.IntentFilter;
 import android.content.res.AssetFileDescriptor;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.media.MediaRecorder;
 import android.media.ThumbnailUtils;
-import android.net.Uri;
 import android.os.Build;
-import android.os.Bundle;
-import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.provider.ContactsContract;
@@ -126,14 +124,8 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
@@ -143,18 +135,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.view.ContextThemeWrapper;
-import androidx.appcompat.widget.Toolbar;
-import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import com.app.abcdadmin.adapters.MessageAdapters;
 import com.app.abcdadmin.async.BaseTask;
 import com.app.abcdadmin.async.TaskRunner;
-import com.app.abcdadmin.fcm.APIService;
 import com.app.abcdadmin.fcm.RetroClient;
 import com.app.abcdadmin.fcmmodels.Data;
 import com.app.abcdadmin.fcmmodels.MyResponse;
@@ -162,36 +148,22 @@ import com.app.abcdadmin.fcmmodels.Sender;
 import com.app.abcdadmin.fcmmodels.Token;
 import com.app.abcdadmin.managers.DownloadUtil;
 import com.app.abcdadmin.managers.FirebaseUploader;
-import com.app.abcdadmin.managers.SessionManager;
 import com.app.abcdadmin.managers.Utils;
 import com.app.abcdadmin.models.Attachment;
 import com.app.abcdadmin.models.AttachmentTypes;
-import com.app.abcdadmin.models.Chat;
 import com.app.abcdadmin.models.DownloadFileEvent;
-import com.app.abcdadmin.models.LocationAddress;
-import com.app.abcdadmin.models.Others;
 import com.app.abcdadmin.models.User;
 import com.app.abcdadmin.views.SingleClickListener;
 import com.devlomi.record_view.OnRecordListener;
-import com.devlomi.record_view.RecordButton;
-import com.devlomi.record_view.RecordView;
-import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
-import com.google.gson.Gson;
 import com.wafflecopter.multicontactpicker.ContactResult;
 import com.wafflecopter.multicontactpicker.LimitColumn;
 import com.wafflecopter.multicontactpicker.MultiContactPicker;
@@ -200,17 +172,14 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
-import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -219,7 +188,7 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
 
     private LinearLayoutManager layoutManager;
     private RecyclerView mRecyclerView;
-    private String currentId, userId, userName = "Sender";
+    private String currentId, userId,ticketId, userName = "Sender";
     private String strSender, strReceiver;
     private ArrayList<Chat> chats;
     private MessageAdapters messageAdapters;
@@ -263,9 +232,13 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
 
     private RelativeLayout rlChatView;
 
-    private String vCardData, displayName, phoneNumber;
+    private String vCardData, displayName, phoneNumber,Name;
     private File fileUri = null;
     private Uri imgUri;
+    private TextView txtUsername;
+    private Button btnCloseTicket;
+    private String type;
+    private RelativeLayout bottomChatLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -274,13 +247,16 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
 
         mActivity = this;
 
+
         apiService = RetroClient.getClient(FCM_URL).create(APIService.class);
 
         initUI();
 
 
 
-        currentId = CURRENT_ID;
+        currentId = "admin_1";
+
+
 
         reference = FirebaseDatabase.getInstance().getReference(REF_USERS).child(currentId);
         reference.addValueEventListener(new ValueEventListener() {
@@ -302,11 +278,13 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
 
         Intent intent = getIntent();
         userId = intent.getStringExtra(EXTRA_USER_ID);
-        userId = "GbW9Rdrhpucn5YIQrJHKWVD1X4d2";
+        ticketId = intent.getStringExtra(TICKET_ID);
+        type = intent.getStringExtra(TYPE);
+        Name = intent.getStringExtra(NAME);
+        txtUsername.setText(Name);
 
         strSender = currentId + SLASH + userId;
-        //strReceiver = userId + SLASH + currentId;
-        strReceiver = "GbW9Rdrhpucn5YIQrJHKWVD1X4d2/GCeJd5SMprMeh0rpXkhkoSMZREy2";
+        strReceiver = userId + SLASH + currentId;
 
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference(REF_CHAT_PHOTO_UPLOAD + SLASH + strSender);
@@ -316,6 +294,10 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
         layoutManager = new LinearLayoutManager(mActivity);
         layoutManager.setStackFromEnd(true);
         mRecyclerView.setLayoutManager(layoutManager);
+        if (type.equals("Closed")){
+            btnCloseTicket.setVisibility(View.GONE);
+            bottomChatLayout.setVisibility(View.GONE);
+        }
         btnGoToBottom.setVisibility(View.GONE);
 
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -365,7 +347,7 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
                     assert user != null;
                     userName = user.getUsername();
                     onlineStatus = Utils.showOnlineOffline(mActivity, user.getIsOnline());
-                    readMessages(user.getImageURL());
+
                 }
             }
 
@@ -374,6 +356,8 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
 
             }
         });
+
+        readMessages();
 
 
         emojiIcon = EmojiPopup.Builder.fromRootView(rootView).setOnEmojiPopupShownListener(() -> {
@@ -386,8 +370,12 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
             return false;
         });
         Utils.uploadTypingStatus();
+        startTyping();
+        //idleTyping(s.length());
+        recordButton.setListenForRecord(false);
+        recordButton.setImageResource(R.drawable.ic_send);
         typingListening();
-        seenMessage();
+        //seenMessage();
 
         final Handler handler = new Handler(Looper.getMainLooper());
         //This permission required because when you playing the recorded your voice, at that time audio wave effect shown.
@@ -408,10 +396,13 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
         mainAttachmentLayout = findViewById(R.id.mainAttachmentLayout);
         mainAttachmentLayout.setVisibility(View.GONE);
         attachmentBGView = findViewById(R.id.attachmentBGView);
+        txtUsername = findViewById(R.id.txtUsername);
+        bottomChatLayout = findViewById(R.id.bottomChatLayout);
         attachmentBGView.setVisibility(View.GONE);
         attachmentBGView.setOnClickListener(this);
 
         imgAttachmentEmoji = findViewById(R.id.imgAttachmentEmoji);
+        btnCloseTicket = findViewById(R.id.btnCloseTicket);
 
         imgAddAttachment.setOnClickListener(this);
         imgCamera.setOnClickListener(this);
@@ -511,6 +502,35 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
 
         recordView.setOnBasketAnimationEndListener(this::showEditTextLayout);
 
+        btnCloseTicket.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showalert();
+            }
+        });
+
+    }
+
+    private void showalert() {
+        new AlertDialog.Builder(mActivity)
+                .setTitle("Close Ticket")
+                .setMessage("Are you sure you want to close this ticket?")
+
+                // Specifying a listener allows you to take an action before dismissing the dialog.
+                // The dialog is automatically dismissed when a dialog button is clicked.
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        DatabaseReference ref1 = FirebaseDatabase.getInstance().getReference().child(OPENED_TICKET).child(ticketId);
+                        DatabaseReference ref2= FirebaseDatabase.getInstance().getReference().child(CLOSED_TICKET).child(ticketId);
+                        moveToOpenTicket(ref1,ref2, "closed");
+
+                    }
+                })
+
+                // A null listener allows the button to dismiss the dialog and take no further action.
+                .setNegativeButton(android.R.string.no, null)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
     }
 
     private void showEditTextLayout() {
@@ -609,6 +629,7 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
         intent.setType("image/*");
         intentLauncher.launch(intent);
     }
+
 
     private void openAudioPicker() {
         if (permissionsAvailable(permissionsStorage)) {
@@ -758,6 +779,28 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
         if (blockUnblockCheckBeforeSend()) {
             return;
         }
+
+        Query query = Utils.checKPendingTicketUser(ticketId);
+        query.keepSynced(true);
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.hasChildren()) {
+                    DatabaseReference ref1 = FirebaseDatabase.getInstance().getReference().child(PENDING_TICKET).child(ticketId);
+                    DatabaseReference ref2= FirebaseDatabase.getInstance().getReference().child(OPENED_TICKET).child(ticketId);
+                    moveToOpenTicket(ref1,ref2,"pending");
+
+                }
+
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
         notify = true;
         String defaultMsg;
         final String sender = currentId;
@@ -813,7 +856,6 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
         final String key = Utils.getChatUniqueId();
         reference.child(REF_CHATS).child(strSender).child(key).setValue(hashMap);
         reference.child(REF_CHATS).child(strReceiver).child(key).setValue(hashMap);
-
         Utils.chatSendSound(getApplicationContext());
 
         try {
@@ -837,6 +879,52 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
             notify = false;
         } catch (Exception ignored) {
         }
+    }
+    public void moveToOpenTicket(DatabaseReference fromPath, final DatabaseReference toPath, String type)
+    {
+        fromPath.addListenerForSingleValueEvent(new ValueEventListener()
+        {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot)
+            {
+                toPath.setValue(dataSnapshot.getValue(), new DatabaseReference.CompletionListener()
+                {
+                    @Override
+                    public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
+                        if (error != null)
+                        {
+                            System.out.println("Copy failed");
+                        }
+                        else {
+                            if (type.equals("pending")) {
+                                DatabaseReference ref1 = FirebaseDatabase.getInstance().getReference().child(PENDING_TICKET).child(ticketId);
+                                ref1.removeValue();
+
+
+                            }
+                            else {
+                                DatabaseReference ref1 = FirebaseDatabase.getInstance().getReference().child(OPENED_TICKET).child(ticketId);
+                                ref1.removeValue();
+                                Intent intent = new Intent(mActivity,MainActivity.class);
+                                startActivity(intent);
+                                finish();
+                            }
+
+                        }
+
+
+                    }
+
+
+                });
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+
+        });
     }
 
     private void sendNotification(String receiver, final String username, final String message, final String type) {
@@ -877,7 +965,7 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
         });
     }
 
-    private void readMessages(final String imageUrl) {
+    private void readMessages() {
         chats = new ArrayList<>();
 
         reference = FirebaseDatabase.getInstance().getReference(REF_CHATS).child(strReceiver);
@@ -901,7 +989,7 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
                     }
                 }
                 try {
-                    messageAdapters = new MessageAdapters(mActivity, chats, userName, strCurrentImage, imageUrl);
+                    messageAdapters = new MessageAdapters(mActivity, chats, userName, strCurrentImage, "",currentId);
                     mRecyclerView.setAdapter(messageAdapters);
                 } catch (Exception e) {
                     Utils.getErrors(e);
@@ -948,6 +1036,10 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
 
 
     private void typingListening() {
+        startTyping();
+        //idleTyping(s.length());
+        recordButton.setListenForRecord(false);
+        recordButton.setImageResource(R.drawable.ic_send);
         newMessage.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -955,22 +1047,22 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                try {
-                    if (s.length() == 0) {
-                        stopTyping();
-                        recordButton.setListenForRecord(true);
-                        recordButton.setImageResource(R.drawable.recv_ic_mic_white);
-                    } else if (s.length() > 0) {
-                        startTyping();
-                        idleTyping(s.length());
-                        recordButton.setListenForRecord(false);
-                        recordButton.setImageResource(R.drawable.ic_send);
-                    }
-                } catch (Exception e) {
-                    stopTyping();
-                    recordButton.setListenForRecord(true);
-                    recordButton.setImageResource(R.drawable.recv_ic_mic_white);
-                }
+//                try {
+//                    if (s.length() == 0) {
+//                        stopTyping();
+//                        recordButton.setListenForRecord(true);
+//                        recordButton.setImageResource(R.drawable.recv_ic_mic_white);
+//                    } else if (s.length() > 0) {
+//                        startTyping();
+//                        idleTyping(s.length());
+//                        recordButton.setListenForRecord(false);
+//                        recordButton.setImageResource(R.drawable.ic_send);
+//                    }
+//                } catch (Exception e) {
+//                    stopTyping();
+//                    recordButton.setListenForRecord(true);
+//                    recordButton.setImageResource(R.drawable.recv_ic_mic_white);
+//                }
             }
 
             @Override

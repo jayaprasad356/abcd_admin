@@ -1,28 +1,18 @@
 package com.app.abcdadmin.adapters;
 
-import static com.app.abcdadmin.constants.IConstants.EMPTY;
-import static com.app.abcdadmin.constants.IConstants.EXTRA_SEEN;
 import static com.app.abcdadmin.constants.IConstants.EXTRA_USER_ID;
+import static com.app.abcdadmin.constants.IConstants.NAME;
 import static com.app.abcdadmin.constants.IConstants.ONE;
-import static com.app.abcdadmin.constants.IConstants.REF_CHATS;
-import static com.app.abcdadmin.constants.IConstants.SLASH;
-import static com.app.abcdadmin.constants.IConstants.STATUS_ONLINE;
+import static com.app.abcdadmin.constants.IConstants.TICKET_ID;
+import static com.app.abcdadmin.constants.IConstants.TYPE;
 import static com.app.abcdadmin.constants.IConstants.TYPE_AUDIO;
-import static com.app.abcdadmin.constants.IConstants.TYPE_CONTACT;
-import static com.app.abcdadmin.constants.IConstants.TYPE_DOCUMENT;
-import static com.app.abcdadmin.constants.IConstants.TYPE_IMAGE;
-import static com.app.abcdadmin.constants.IConstants.TYPE_LOCATION;
-import static com.app.abcdadmin.constants.IConstants.TYPE_RECORDING;
-import static com.app.abcdadmin.constants.IConstants.TYPE_VIDEO;
 import static com.app.abcdadmin.constants.IConstants.ZERO;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -30,19 +20,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.app.abcdadmin.MessageActivity;
 import com.app.abcdadmin.R;
-import com.app.abcdadmin.managers.Screens;
 import com.app.abcdadmin.managers.Utils;
-import com.app.abcdadmin.models.Chat;
 import com.app.abcdadmin.models.Ticket;
-import com.app.abcdadmin.models.User;
 import com.app.abcdadmin.views.SingleClickListener;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
 
 import org.jetbrains.annotations.NotNull;
@@ -53,11 +33,13 @@ public class TicketAdapters extends RecyclerView.Adapter<TicketAdapters.ViewHold
 
     private final Activity mContext;
     private final ArrayList<Ticket> mTickets;
+    private  final String type;
 
 
-    public TicketAdapters(Activity mContext, ArrayList<Ticket> ticketsList) {
+    public TicketAdapters(Activity mContext, ArrayList<Ticket> ticketsList, String type) {
         this.mContext = mContext;
         this.mTickets = ticketsList;
+        this.type = type;
     }
 
     @NonNull
@@ -80,6 +62,9 @@ public class TicketAdapters extends RecyclerView.Adapter<TicketAdapters.ViewHold
             public void onClickView(View v) {
                 final Intent intent = new Intent(mContext, MessageActivity.class);
                 intent.putExtra(EXTRA_USER_ID, ticket.getId());
+                intent.putExtra(TICKET_ID, ticket.getId());
+                intent.putExtra(NAME, ticket.getName());
+                intent.putExtra(TYPE, type);
                 mContext.startActivity(intent);
             }
         });

@@ -59,16 +59,18 @@ public class MessageAdapters extends RecyclerView.Adapter<MessageAdapters.ViewHo
     private final String imageUrl;
     private final String strCurrentImage;
     private final String userName;
+    private final String currentId;
     private final ArrayList<AudioPlayerView> myViewList;
     private final ArrayList<RecordingPlayerView> myRecList;
     private boolean isAudioPlaying = false, isRecordingPlaying = false;
     private final Screens screens;
 
-    public MessageAdapters(Context mContext, ArrayList<Chat> chatList, String userName, String strCurrentImage, String imageUrl) {
+    public MessageAdapters(Context mContext, ArrayList<Chat> chatList, String userName, String strCurrentImage, String imageUrl, String currentId) {
         this.mContext = mContext;
         this.mChats = chatList;
         this.userName = userName;
         this.imageUrl = imageUrl;
+        this.currentId = currentId;
         this.strCurrentImage = strCurrentImage;
         this.myViewList = new ArrayList<>();
         this.myRecList = new ArrayList<>();
@@ -739,7 +741,7 @@ public class MessageAdapters extends RecyclerView.Adapter<MessageAdapters.ViewHo
     @Override
     public int getItemViewType(int position) {
         final Chat chat = mChats.get(position);
-        if (chat.getSender().equalsIgnoreCase(CURRENT_ID)) {
+        if (chat.getSender().equalsIgnoreCase(currentId)) {
             return MSG_TYPE_RIGHT;
         } else {
             return MSG_TYPE_LEFT;

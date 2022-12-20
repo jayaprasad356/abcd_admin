@@ -58,7 +58,6 @@ public class ChatsFragment extends BaseFragment {
 
     private ArrayList<String> userList;
     private RelativeLayout imgNoMessage;
-    private String currentId;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -81,174 +80,12 @@ public class ChatsFragment extends BaseFragment {
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mRecyclerView.getContext(), layoutManager.getOrientation());
         mRecyclerView.addItemDecoration(dividerItemDecoration);
 
-        //final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        //currentId = Objects.requireNonNull(firebaseUser).getUid();
-        currentId = CURRENT_ID;
         userList = new ArrayList<>();
-
-        Query query = FirebaseDatabase.getInstance().getReference(REF_CHATS).child(currentId);
-        query.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                userList.clear();
-                uList.clear();
-                if (dataSnapshot.hasChildren()) {
-                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                        userList.add(snapshot.getKey());
-                    }
-                }
-
-                if (userList.size() > 0) {
-                    sortChats();
-                } else {
-                    imgNoMessage.setVisibility(View.VISIBLE);
-                    mRecyclerView.setVisibility(View.GONE);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
 
         FirebaseMessaging.getInstance().getToken().addOnSuccessListener(Utils::uploadToken);
         return view;
     }
 
-    Map<String, Chat> uList = new HashMap<>();
-
-    private void sortChats() {
-        for (int i = 0; i < userList.size(); i++) {
-            final String key = userList.get(i);
-
-            Query query = FirebaseDatabase.getInstance().getReference(REF_CHATS).child(currentId + SLASH + key).limitToLast(1);
-            query.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    if (dataSnapshot.hasChildren()) {
-                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                            Chat chat = snapshot.getValue(Chat.class);
-                            uList.put(key, chat);
-                        }
-                    }
-
-                    if (uList.size() == userList.size()) {
-
-                        if (uList.size() > 0) {
-                            uList = Utils.sortByChatDateTime(uList, false);
-                        }
-
-                        userList = new ArrayList(uList.keySet());
-
-                        readChats();
-                    }
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                }
-            });
-
-        }
-
-    }
-
-    private void readChats() {
-        mUsers = new ArrayList<>();
-
-        Query reference = Utils.getQuerySortBySearch();
-        reference.keepSynced(true);
-        reference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                mUsers.clear();
-                if (dataSnapshot.hasChildren()) {
-                    try {
-                        for (String id : userList) {
-                            for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                                User user = snapshot.getValue(User.class);
-                                assert user != null;
-                                if (user.getId().equalsIgnoreCase(id) && user.isActive()) {
-                                    onlineOptionFilter(user);
-                                    break;
-                                }
-                            }
-                        }
-                    } catch (Exception e) {
-                        //Utils.getErrors(e);
-                    }
-                }
-
-                if (mUsers.size() > 0) {
-                    imgNoMessage.setVisibility(View.GONE);
-                    mRecyclerView.setVisibility(View.VISIBLE);
-                    userAdapters = new UserAdapters(getContext(), mUsers, TRUE);
-                    mRecyclerView.setAdapter(userAdapters);
-                } else {
-                    imgNoMessage.setVisibility(View.VISIBLE);
-                    mRecyclerView.setVisibility(View.GONE);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
-    }
-
-    private void onlineOptionFilter(final User user) {
-        try {
-            if (user.getIsOnline() == STATUS_ONLINE) {
-                if (online)
-                    profileOptionFilter(user);
-            } else if (user.getIsOnline() == STATUS_OFFLINE) {
-                if (offline)
-                    profileOptionFilter(user);
-            } else {
-                profileOptionFilter(user);
-            }
-        } catch (Exception ignored) {
-        }
-    }
-
-
-    private void profileOptionFilter(final User user) {
-        try {
-            if (!user.getImageURL().equalsIgnoreCase(IMG_DEFAULTS)) {
-                if (withPicture)
-                    levelOptionFilter(user);
-            } else if (user.getImageURL().equalsIgnoreCase(IMG_DEFAULTS)) {
-                if (withoutPicture)
-                    levelOptionFilter(user);
-            } else {
-                levelOptionFilter(user);
-            }
-        } catch (Exception ignored) {
-        }
-    }
-
-    private void levelOptionFilter(final User user) {
-        try {
-            if (user.getGenders() == GEN_UNSPECIFIED) {
-                if (notset)
-                    addNewUserDataToList(user);
-            } else {
-                if (user.getGenders() == GEN_MALE) {
-                    if (male)
-                        addNewUserDataToList(user);
-                } else if (user.getGenders() == GEN_FEMALE) {
-                    if (female)
-                        addNewUserDataToList(user);
-                }
-            }
-        } catch (Exception e) {
-            addNewUserDataToList(user);
-        }
-    }
 
     private void addNewUserDataToList(User user) {
         mUsers.add(user);

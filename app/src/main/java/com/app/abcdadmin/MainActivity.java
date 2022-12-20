@@ -51,7 +51,7 @@ public class MainActivity extends BaseActivity{
     private TextView mTxtUsername;
     private ViewPager2 mViewPager;
     private long exitTime = 0;
-    Fragment chatFragment,pendingTicketFragment;
+    Fragment chatFragment,pendingTicketFragment,ticketFragment;
     public static FragmentManager fm = null;
 
 
@@ -73,7 +73,8 @@ public class MainActivity extends BaseActivity{
 
         chatFragment = new ChatsFragment();
         pendingTicketFragment = new PendingTicketFragment();
-        fm.beginTransaction().replace(R.id.container, pendingTicketFragment).commit();
+        ticketFragment = new TicketFragment();
+        fm.beginTransaction().replace(R.id.container, ticketFragment).commit();
 
 
     }
