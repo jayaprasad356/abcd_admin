@@ -13,11 +13,13 @@ public interface IConstants {
     String EXT_VCF = ".vcf";
 
     String REF_USERS = "Users";
+    String CHAT_SUPPORT = "chat_support";
     String PENDING_TICKET = "pending_ticket";
     String OPENED_TICKET = "opened_ticket";
     String CLOSED_TICKET = "closed_ticket";
     String REF_CHATS = "Chats_v2";
     String REF_UPLOAD = "Uploads";
+    String TIMESTAMP = "timestamp";
     String REF_BLOCK_USERS = "BlockUsers";
     String CURRENT_ID = "GCeJd5SMprMeh0rpXkhkoSMZREy2";
 
@@ -136,6 +138,8 @@ public interface IConstants {
     String TYPE_IMAGE = "IMAGE";
     String TYPE_AUDIO = "AUDIO";
     String TYPE = "type";
+    String SUPPORT = "support";
+    String ROLE = "role";
     String TYPE_VIDEO = "VIDEO";
     String TYPE_CONTACT = "CONTACT";
     String TYPE_DOCUMENT = "DOCUMENT";

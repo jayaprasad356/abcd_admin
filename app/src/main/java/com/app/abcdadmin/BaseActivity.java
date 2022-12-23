@@ -5,19 +5,21 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
+import com.app.abcdadmin.helper.Session;
 import com.app.abcdadmin.managers.Screens;
 import com.app.abcdadmin.managers.Utils;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 
-public class BaseActivity extends AppCompatActivity {
+public abstract class BaseActivity extends AppCompatActivity {
     protected final String[] permissionsRecord = {Manifest.permission.VIBRATE, Manifest.permission.RECORD_AUDIO, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
     protected final String[] permissionsContact = {Manifest.permission.READ_CONTACTS, Manifest.permission.WRITE_EXTERNAL_STORAGE};
     protected final String[] permissionsStorage = {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
@@ -27,11 +29,13 @@ public class BaseActivity extends AppCompatActivity {
     public DatabaseReference reference; //Database related
     public Screens screens;
     public ImageView imgBack;
+    Session session;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mActivity = this;
+        session = new Session(mActivity);
         screens = new Screens(mActivity);
 //        try {
 //            authStateListener = firebaseAuth -> {
@@ -100,4 +104,6 @@ public class BaseActivity extends AppCompatActivity {
         }
         return granted;
     }
+
+    public abstract boolean onMenuItemClick(MenuItem item);
 }

@@ -15,6 +15,7 @@ import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -91,7 +92,9 @@ import static com.app.abcdadmin.constants.IConstants.REQUEST_CODE_PLAY_SERVICES;
 import static com.app.abcdadmin.constants.IConstants.REQUEST_PERMISSION_RECORD;
 import static com.app.abcdadmin.constants.IConstants.SLASH;
 import static com.app.abcdadmin.constants.IConstants.STATUS_ONLINE;
+import static com.app.abcdadmin.constants.IConstants.SUPPORT;
 import static com.app.abcdadmin.constants.IConstants.TICKET_ID;
+import static com.app.abcdadmin.constants.IConstants.TIMESTAMP;
 import static com.app.abcdadmin.constants.IConstants.TRUE;
 import static com.app.abcdadmin.constants.IConstants.TWO;
 import static com.app.abcdadmin.constants.IConstants.TYPE;
@@ -126,6 +129,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
@@ -236,7 +240,7 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
     private File fileUri = null;
     private Uri imgUri;
     private TextView txtUsername;
-    private Button btnCloseTicket;
+    private ImageView imgSuperAdmin,imgCloseTicket;
     private String type;
     private RelativeLayout bottomChatLayout;
 
@@ -255,6 +259,7 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
 
 
         currentId = "admin_1";
+
 
 
 
@@ -294,8 +299,12 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
         layoutManager = new LinearLayoutManager(mActivity);
         layoutManager.setStackFromEnd(true);
         mRecyclerView.setLayoutManager(layoutManager);
-        if (type.equals("Closed")){
-            btnCloseTicket.setVisibility(View.GONE);
+
+        if (type.equals(PENDING_TICKET)){
+            imgSuperAdmin.setVisibility(View.GONE);
+        }
+        if (type.equals(CLOSED_TICKET)){
+            imgCloseTicket.setVisibility(View.GONE);
             bottomChatLayout.setVisibility(View.GONE);
         }
         btnGoToBottom.setVisibility(View.GONE);
@@ -370,16 +379,16 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
             return false;
         });
         Utils.uploadTypingStatus();
-        startTyping();
-        //idleTyping(s.length());
-        recordButton.setListenForRecord(false);
-        recordButton.setImageResource(R.drawable.ic_send);
         typingListening();
-        //seenMessage();
 
         final Handler handler = new Handler(Looper.getMainLooper());
         //This permission required because when you playing the recorded your voice, at that time audio wave effect shown.
         handler.postDelayed(this::permissionRecording, 800);
+    }
+
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        return false;
     }
 
     private void initUI() {
@@ -402,7 +411,8 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
         attachmentBGView.setOnClickListener(this);
 
         imgAttachmentEmoji = findViewById(R.id.imgAttachmentEmoji);
-        btnCloseTicket = findViewById(R.id.btnCloseTicket);
+        imgSuperAdmin = findViewById(R.id.imgSuperAdmin);
+        imgCloseTicket = findViewById(R.id.imgCloseTicket);
 
         imgAddAttachment.setOnClickListener(this);
         imgCamera.setOnClickListener(this);
@@ -418,6 +428,9 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
         recordButton = findViewById(R.id.recordButton);
         recordButton.setRecordView(recordView);//IMPORTANT
 
+
+
+
         initListener();
 
         pickerManager = new PickerManager(this, this, this);
@@ -426,9 +439,7 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
     private void initListener() {
         //ListenForRecord must be false ,otherwise onClick will not be called
         recordButton.setOnRecordClickListener(v -> {
-            if (!blockUnblockCheckBeforeSend()) {
-                clickToSend();
-            }
+            clickToSend();
         });
 
         //Cancel Bounds is when the Slide To Cancel text gets before the timer . default is 8
@@ -502,10 +513,16 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
 
         recordView.setOnBasketAnimationEndListener(this::showEditTextLayout);
 
-        btnCloseTicket.setOnClickListener(new View.OnClickListener() {
+        imgCloseTicket.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 showalert();
+            }
+        });
+        imgSuperAdmin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sendToSuperAdmin();
             }
         });
 
@@ -532,6 +549,31 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .show();
     }
+    private void sendToSuperAdmin() {
+        new AlertDialog.Builder(mActivity)
+                .setTitle("Send to Super Admin")
+                .setMessage("Are you sure you want to send this ticket?")
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        reference = FirebaseDatabase.getInstance().getReference(type).child(ticketId);
+                        HashMap<String, Object> hashMap = new HashMap<>();
+                        hashMap.put(SUPPORT, "Super Admin");
+                        reference.updateChildren(hashMap).addOnCompleteListener(task1 -> {
+                            Toast.makeText(mActivity, "Ticket Send to Super Admin", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(mActivity, MainActivity.class);
+                            startActivity(intent);
+                            finish();
+                        });
+
+                    }
+                })
+
+                // A null listener allows the button to dismiss the dialog and take no further action.
+                .setNegativeButton(android.R.string.no, null)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
+    }
+
 
     private void showEditTextLayout() {
         if (isStart) {
@@ -540,7 +582,8 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
                 imgAttachmentEmoji.setVisibility(View.VISIBLE);
                 newMessage.setVisibility(View.VISIBLE);
                 imgAddAttachment.setVisibility(View.VISIBLE);
-                imgCamera.setVisibility(View.VISIBLE);
+                //imgCamera.setVisibility(View.VISIBLE);
+                imgCamera.setVisibility(View.GONE);
             }, 10);
         }
         isStart = false;
@@ -786,6 +829,7 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.hasChildren()) {
+
                     DatabaseReference ref1 = FirebaseDatabase.getInstance().getReference().child(PENDING_TICKET).child(ticketId);
                     DatabaseReference ref2= FirebaseDatabase.getInstance().getReference().child(OPENED_TICKET).child(ticketId);
                     moveToOpenTicket(ref1,ref2,"pending");
@@ -897,12 +941,18 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
                         }
                         else {
                             if (type.equals("pending")) {
+                                HashMap<String, Object> hashMap = new HashMap<>();
+                                hashMap.put(TYPE, OPENED_TICKET);
+                                toPath.updateChildren(hashMap);
                                 DatabaseReference ref1 = FirebaseDatabase.getInstance().getReference().child(PENDING_TICKET).child(ticketId);
                                 ref1.removeValue();
 
 
                             }
                             else {
+                                HashMap<String, Object> hashMap = new HashMap<>();
+                                hashMap.put(TYPE, CLOSED_TICKET);
+                                toPath.updateChildren(hashMap);
                                 DatabaseReference ref1 = FirebaseDatabase.getInstance().getReference().child(OPENED_TICKET).child(ticketId);
                                 ref1.removeValue();
                                 Intent intent = new Intent(mActivity,MainActivity.class);
@@ -1036,10 +1086,6 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
 
 
     private void typingListening() {
-        startTyping();
-        //idleTyping(s.length());
-        recordButton.setListenForRecord(false);
-        recordButton.setImageResource(R.drawable.ic_send);
         newMessage.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -1047,22 +1093,22 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-//                try {
-//                    if (s.length() == 0) {
-//                        stopTyping();
-//                        recordButton.setListenForRecord(true);
-//                        recordButton.setImageResource(R.drawable.recv_ic_mic_white);
-//                    } else if (s.length() > 0) {
-//                        startTyping();
-//                        idleTyping(s.length());
-//                        recordButton.setListenForRecord(false);
-//                        recordButton.setImageResource(R.drawable.ic_send);
-//                    }
-//                } catch (Exception e) {
-//                    stopTyping();
-//                    recordButton.setListenForRecord(true);
-//                    recordButton.setImageResource(R.drawable.recv_ic_mic_white);
-//                }
+                try {
+                    if (s.length() == 0) {
+                        stopTyping();
+                        recordButton.setListenForRecord(true);
+                        recordButton.setImageResource(R.drawable.recv_ic_mic_white);
+                    } else if (s.length() > 0) {
+                        startTyping();
+                        idleTyping(s.length());
+                        recordButton.setListenForRecord(false);
+                        recordButton.setImageResource(R.drawable.ic_send);
+                    }
+                } catch (Exception e) {
+                    stopTyping();
+                    recordButton.setListenForRecord(true);
+                    recordButton.setImageResource(R.drawable.recv_ic_mic_white);
+                }
             }
 
             @Override
@@ -1486,8 +1532,8 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
             boolean dirExists = recordFile.exists();
             if (!dirExists)
                 dirExists = recordFile.mkdirs();
-
             if (dirExists) {
+
                 try {
                     recordFile = Utils.getSentFile(getCacheDir(), EXT_MP3);
                     if (!recordFile.exists())
@@ -1785,5 +1831,10 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
             }
         } catch (Exception ignored) {
         }
+    }
+
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+        super.onPointerCaptureChanged(hasCapture);
     }
 }

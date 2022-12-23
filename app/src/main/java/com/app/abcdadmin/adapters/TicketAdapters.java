@@ -64,7 +64,7 @@ public class TicketAdapters extends RecyclerView.Adapter<TicketAdapters.ViewHold
                 intent.putExtra(EXTRA_USER_ID, ticket.getId());
                 intent.putExtra(TICKET_ID, ticket.getId());
                 intent.putExtra(NAME, ticket.getName());
-                intent.putExtra(TYPE, type);
+                intent.putExtra(TYPE, ticket.getType());
                 mContext.startActivity(intent);
             }
         });

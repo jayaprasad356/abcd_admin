@@ -20,6 +20,8 @@ public class Ticket implements Serializable {
     private String title;
     private String description;
     private String mobile;
+    private String support;
+    private String type;
 
     public String getId() {
         return id;
@@ -75,5 +77,21 @@ public class Ticket implements Serializable {
 
     public void setMobile(String mobile) {
         this.mobile = mobile;
+    }
+
+    public String getSupport() {
+        return support;
+    }
+
+    public void setSupport(String support) {
+        this.support = support;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

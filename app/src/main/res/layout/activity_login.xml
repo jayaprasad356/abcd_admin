@@ -64,7 +64,7 @@
                 />
 
             <EditText
-                android:id="@+id/EtPhoneNumber"
+                android:id="@+id/edEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Email"
@@ -88,7 +88,7 @@
                 />
 
             <EditText
-                android:id="@+id/EtPassword"
+                android:id="@+id/edPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Password"

@@ -21,16 +21,33 @@
             android:background="@color/colorPrimaryDark"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
             app:popupTheme="@style/MenuStyle">
-            <Button
-                android:id="@+id/btnCloseTicket"
+            <LinearLayout
+                android:layout_gravity="end"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Close Ticket"
-                android:textAllCaps="false"
-                android:layout_margin="@dimen/_5sdp"
-                android:textSize="@dimen/_8sdp"
-                android:layout_gravity="end"
-                android:backgroundTint="@color/red_900"/>
+                android:layout_marginHorizontal="@dimen/_5sdp"
+                android:orientation="horizontal">
+                <ImageView
+                    android:id="@+id/imgSuperAdmin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_baseline_support_agent_24"
+                    android:padding="@dimen/_5sdp"
+                    android:background="@color/primaryLightColor"/>
+                <Space
+                    android:layout_width="@dimen/_25sdp"
+                    android:layout_height="wrap_content"/>
+                <ImageView
+                    android:id="@+id/imgCloseTicket"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_baseline_close_24"
+                    android:padding="@dimen/_5sdp"
+                    android:background="@color/red_900"/>
+
+            </LinearLayout>
+
+
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -175,6 +192,7 @@
                         android:id="@+id/imgAddAttachment"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
                         android:layout_toStartOf="@+id/imgCamera"
                         android:background="?android:selectableItemBackgroundBorderless"
@@ -182,7 +200,6 @@
                         android:contentDescription="@string/cDescription"
                         android:focusable="true"
                         android:padding="@dimen/padding4"
-                        android:visibility="gone"
                         app:srcCompat="@drawable/ic_attach_file"
                         app:tint="@color/grey_500" />
 

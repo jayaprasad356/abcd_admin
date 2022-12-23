@@ -3,6 +3,7 @@ package com.app.abcdadmin.managers;
 import static android.os.Build.VERSION.SDK_INT;
 
 
+import static com.app.abcdadmin.constants.IConstants.CHAT_SUPPORT;
 import static com.app.abcdadmin.constants.IConstants.CLOSED_TICKET;
 import static com.app.abcdadmin.constants.IConstants.EXTRA_IS_ONLINE;
 import static com.app.abcdadmin.constants.IConstants.EXTRA_LASTSEEN;
@@ -25,6 +26,7 @@ import static com.app.abcdadmin.constants.IConstants.SENT_FILE;
 import static com.app.abcdadmin.constants.IConstants.SLASH;
 import static com.app.abcdadmin.constants.IConstants.STATUS_OFFLINE;
 import static com.app.abcdadmin.constants.IConstants.STATUS_ONLINE;
+import static com.app.abcdadmin.constants.IConstants.TIMESTAMP;
 import static com.app.abcdadmin.constants.IConstants.TYPE_RECORDING;
 
 import android.annotation.SuppressLint;
@@ -674,17 +676,20 @@ public class Utils {
     public static Query getQuerySortBySearch() {
         return FirebaseDatabase.getInstance().getReference(REF_USERS).orderByChild(EXTRA_SEARCH).startAt("").endAt("" + "\uf8ff");
     }
+    public static Query getQuerySupportStatus() {
+        return FirebaseDatabase.getInstance().getReference(CHAT_SUPPORT);
+    }
     public static Query getQueryPendingTicket() {
-        return FirebaseDatabase.getInstance().getReference(PENDING_TICKET);
+        return FirebaseDatabase.getInstance().getReference(PENDING_TICKET).orderByChild(TIMESTAMP);
     }
     public static Query checKPendingTicketUser(String TicketId) {
         return FirebaseDatabase.getInstance().getReference(PENDING_TICKET).child(TicketId);
     }
     public static Query getQueryOpenedTicket() {
-        return FirebaseDatabase.getInstance().getReference(OPENED_TICKET);
+        return FirebaseDatabase.getInstance().getReference(OPENED_TICKET).orderByChild(TIMESTAMP);
     }
     public static Query getQueryClosedTicket() {
-        return FirebaseDatabase.getInstance().getReference(CLOSED_TICKET);
+        return FirebaseDatabase.getInstance().getReference(CLOSED_TICKET).orderByChild(TIMESTAMP);
     }
     public static void setProfileImage(Context context, String imgUrl, ImageView mImageView) {
         try {

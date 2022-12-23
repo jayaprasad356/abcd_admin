@@ -1,5 +1,7 @@
 package com.app.abcdadmin;
 
+import static com.app.abcdadmin.constants.IConstants.ROLE;
+
 import android.app.Activity;
 import android.os.Bundle;
 
@@ -16,6 +18,7 @@ import android.widget.CompoundButton;
 import android.widget.Toast;
 
 import com.app.abcdadmin.adapters.TicketAdapters;
+import com.app.abcdadmin.helper.Session;
 import com.app.abcdadmin.managers.Utils;
 import com.app.abcdadmin.models.Ticket;
 import com.google.android.material.chip.Chip;
@@ -33,6 +36,7 @@ public class TicketFragment extends Fragment {
     Activity activity;
     Chip chipPending,chipOpened,chipClosed;
     String type = "";
+    Session session;
 
 
     public TicketFragment() {
@@ -52,9 +56,14 @@ public class TicketFragment extends Fragment {
         chipClosed = root.findViewById(R.id.chipClosed);
         mRecyclerView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(activity);
+        layoutManager.setReverseLayout(true);
+        layoutManager.setStackFromEnd(true);
         mRecyclerView.setLayoutManager(layoutManager);
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mRecyclerView.getContext(), layoutManager.getOrientation());
         mRecyclerView.addItemDecoration(dividerItemDecoration);
+
+        session = new Session(activity);
+
         readTickets();
 
         chipPending.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -108,10 +117,15 @@ public class TicketFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 mTickets.clear();
                 if (dataSnapshot.hasChildren()) {
+                    chipPending.setText("Pending"+"("+dataSnapshot.getChildrenCount()+")");
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         Ticket user = snapshot.getValue(Ticket.class);
                         assert user != null;
-                        mTickets.add(user);
+
+                        if (user.getSupport() != null && user.getSupport().equals(session.getData(ROLE))){
+                            mTickets.add(user);
+                        }
+
                     }
 
                 }
