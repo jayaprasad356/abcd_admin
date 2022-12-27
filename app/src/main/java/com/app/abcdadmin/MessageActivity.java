@@ -4,6 +4,8 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.media.MediaRecorder;
@@ -72,6 +74,7 @@ import static com.app.abcdadmin.constants.IConstants.EXT_MP3;
 import static com.app.abcdadmin.constants.IConstants.EXT_VCF;
 import static com.app.abcdadmin.constants.IConstants.FALSE;
 import static com.app.abcdadmin.constants.IConstants.FCM_URL;
+import static com.app.abcdadmin.constants.IConstants.MOBILE;
 import static com.app.abcdadmin.constants.IConstants.NAME;
 import static com.app.abcdadmin.constants.IConstants.ONE;
 import static com.app.abcdadmin.constants.IConstants.OPENED_TICKET;
@@ -90,6 +93,7 @@ import static com.app.abcdadmin.constants.IConstants.REF_VIDEO_THUMBS;
 import static com.app.abcdadmin.constants.IConstants.REQUEST_CODE_CONTACT;
 import static com.app.abcdadmin.constants.IConstants.REQUEST_CODE_PLAY_SERVICES;
 import static com.app.abcdadmin.constants.IConstants.REQUEST_PERMISSION_RECORD;
+import static com.app.abcdadmin.constants.IConstants.ROLE;
 import static com.app.abcdadmin.constants.IConstants.SLASH;
 import static com.app.abcdadmin.constants.IConstants.STATUS_ONLINE;
 import static com.app.abcdadmin.constants.IConstants.SUPPORT;
@@ -241,8 +245,9 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
     private Uri imgUri;
     private TextView txtUsername;
     private ImageView imgSuperAdmin,imgCloseTicket;
-    private String type;
+    private String type,Mobile;
     private RelativeLayout bottomChatLayout;
+    ImageView imgMobile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -285,6 +290,7 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
         userId = intent.getStringExtra(EXTRA_USER_ID);
         ticketId = intent.getStringExtra(TICKET_ID);
         type = intent.getStringExtra(TYPE);
+        Mobile = intent.getStringExtra(MOBILE);
         Name = intent.getStringExtra(NAME);
         txtUsername.setText(Name);
 
@@ -300,6 +306,16 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
         layoutManager.setStackFromEnd(true);
         mRecyclerView.setLayoutManager(layoutManager);
 
+
+        imgMobile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText("mobile", Mobile);
+                clipboard.setPrimaryClip(clip);
+                Toast.makeText(mActivity, "Mobile number Copied", Toast.LENGTH_SHORT).show();
+            }
+        });
         if (type.equals(PENDING_TICKET)){
             imgSuperAdmin.setVisibility(View.GONE);
         }
@@ -407,12 +423,15 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
         attachmentBGView = findViewById(R.id.attachmentBGView);
         txtUsername = findViewById(R.id.txtUsername);
         bottomChatLayout = findViewById(R.id.bottomChatLayout);
+        imgMobile = findViewById(R.id.imgMobile);
         attachmentBGView.setVisibility(View.GONE);
         attachmentBGView.setOnClickListener(this);
 
         imgAttachmentEmoji = findViewById(R.id.imgAttachmentEmoji);
         imgSuperAdmin = findViewById(R.id.imgSuperAdmin);
         imgCloseTicket = findViewById(R.id.imgCloseTicket);
+
+
 
         imgAddAttachment.setOnClickListener(this);
         imgCamera.setOnClickListener(this);
@@ -522,9 +541,42 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
         imgSuperAdmin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                sendToSuperAdmin();
+                if (session.getData(ROLE).equals("Super Admin")){
+                    sendToAdmin();
+                }else {
+                    sendToSuperAdmin();
+                    
+                }
+                
             }
         });
+
+    }
+
+    private void sendToAdmin()
+    {
+        new AlertDialog.Builder(mActivity)
+                .setTitle("Assign to Admin")
+                .setMessage("Are you sure you want to assign this ticket?")
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        reference = FirebaseDatabase.getInstance().getReference(type).child(ticketId);
+                        HashMap<String, Object> hashMap = new HashMap<>();
+                        hashMap.put(SUPPORT, "Admin");
+                        reference.updateChildren(hashMap).addOnCompleteListener(task1 -> {
+                            Toast.makeText(mActivity, "Ticket Assign to Admin", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(mActivity, MainActivity.class);
+                            startActivity(intent);
+                            finish();
+                        });
+
+                    }
+                })
+
+                // A null listener allows the button to dismiss the dialog and take no further action.
+                .setNegativeButton(android.R.string.no, null)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
 
     }
 
@@ -551,15 +603,15 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
     }
     private void sendToSuperAdmin() {
         new AlertDialog.Builder(mActivity)
-                .setTitle("Send to Super Admin")
-                .setMessage("Are you sure you want to send this ticket?")
+                .setTitle("Assign to Manager")
+                .setMessage("Are you sure you want to assign this ticket?")
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         reference = FirebaseDatabase.getInstance().getReference(type).child(ticketId);
                         HashMap<String, Object> hashMap = new HashMap<>();
                         hashMap.put(SUPPORT, "Super Admin");
                         reference.updateChildren(hashMap).addOnCompleteListener(task1 -> {
-                            Toast.makeText(mActivity, "Ticket Send to Super Admin", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(mActivity, "Ticket Assign to Manager", Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(mActivity, MainActivity.class);
                             startActivity(intent);
                             finish();

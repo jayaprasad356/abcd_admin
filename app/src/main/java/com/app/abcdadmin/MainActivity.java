@@ -19,6 +19,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -38,6 +39,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.app.abcdadmin.managers.Utils;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.materialswitch.MaterialSwitch;
 import com.google.android.material.snackbar.Snackbar;
@@ -68,6 +71,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
     public static FragmentManager fm = null;
     ImageView imgMenu;
     SwitchMaterial supportSwitch;
+    ProgressDialog progressDialog;
 
 
     @Override
@@ -79,6 +83,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
         imgMenu = findViewById(R.id.imgMenu);
         supportSwitch = findViewById(R.id.supportSwitch);
         fm = getSupportFragmentManager();
+        progressDialog = new ProgressDialog(this);
         final Toolbar mToolbar = findViewById(R.id.toolbar);
 
         setSupportActionBar(mToolbar);
@@ -115,16 +120,33 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
         supportSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                progressDialog.setMessage("Loading");
+                progressDialog.show();
                 DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child(CHAT_SUPPORT);
                 if (b){
 
                     HashMap<String, Object> hashMap = new HashMap<>();
                     hashMap.put(SUPPORT, TRUE);
-                    ref.updateChildren(hashMap);
+                    ref.updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            progressDialog.dismiss();
+                            Toast.makeText(mActivity, "Chat Enabled", Toast.LENGTH_SHORT).show();
+
+                        }
+                    });
 
 
                 }else {
-                    ref.removeValue();
+                    ref.removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            progressDialog.dismiss();
+                            Toast.makeText(mActivity, "Chat Disabled", Toast.LENGTH_SHORT).show();
+
+
+                        }
+                    });
 
                 }
             }

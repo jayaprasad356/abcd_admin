@@ -6,12 +6,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".TicketFragment">
 
+    <Spinner
+        android:id="@+id/spinCategory"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_40sdp"
+        android:layout_marginHorizontal="@dimen/_5sdp"
+        android:entries="@array/categories" />
+
     <HorizontalScrollView
         android:id="@+id/hori"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingStart="@dimen/_5sdp"
         android:layout_centerHorizontal="true"
+        android:paddingStart="@dimen/_5sdp"
+        android:layout_below="@+id/spinCategory"
         tools:ignore="RtlSymmetry">
 
         <com.google.android.material.chip.ChipGroup

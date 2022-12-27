@@ -1,6 +1,7 @@
 package com.app.abcdadmin.adapters;
 
 import static com.app.abcdadmin.constants.IConstants.EXTRA_USER_ID;
+import static com.app.abcdadmin.constants.IConstants.MOBILE;
 import static com.app.abcdadmin.constants.IConstants.NAME;
 import static com.app.abcdadmin.constants.IConstants.ONE;
 import static com.app.abcdadmin.constants.IConstants.TICKET_ID;
@@ -54,7 +55,6 @@ public class TicketAdapters extends RecyclerView.Adapter<TicketAdapters.ViewHold
         final Ticket ticket = mTickets.get(i);
         viewHolder.tvName.setText(ticket.getName());
         viewHolder.tvMobile.setText(ticket.getMobile());
-        viewHolder.tvTitle.setText(ticket.getTitle());
         viewHolder.tvDescription.setText(ticket.getDescription());
         viewHolder.tvCategory.setText(ticket.getCategory());
         viewHolder.itemView.setOnClickListener(new SingleClickListener() {
@@ -65,6 +65,7 @@ public class TicketAdapters extends RecyclerView.Adapter<TicketAdapters.ViewHold
                 intent.putExtra(TICKET_ID, ticket.getId());
                 intent.putExtra(NAME, ticket.getName());
                 intent.putExtra(TYPE, ticket.getType());
+                intent.putExtra(MOBILE, ticket.getMobile());
                 mContext.startActivity(intent);
             }
         });
@@ -84,14 +85,13 @@ public class TicketAdapters extends RecyclerView.Adapter<TicketAdapters.ViewHold
 
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        public final TextView tvName,tvMobile,tvTitle,tvDescription,tvCategory;
+        public final TextView tvName,tvMobile,tvDescription,tvCategory;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             tvName = itemView.findViewById(R.id.tvName);
             tvMobile = itemView.findViewById(R.id.tvMobile);
-            tvTitle = itemView.findViewById(R.id.tvTitle);
             tvDescription = itemView.findViewById(R.id.tvDescription);
             tvCategory = itemView.findViewById(R.id.tvCategory);
         }

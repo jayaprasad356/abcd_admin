@@ -1,5 +1,8 @@
 package com.app.abcdadmin;
 
+import static com.app.abcdadmin.constants.IConstants.CLOSED_TICKET;
+import static com.app.abcdadmin.constants.IConstants.OPENED_TICKET;
+import static com.app.abcdadmin.constants.IConstants.PENDING_TICKET;
 import static com.app.abcdadmin.constants.IConstants.ROLE;
 
 import android.app.Activity;
@@ -14,7 +17,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.CompoundButton;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.app.abcdadmin.adapters.TicketAdapters;
@@ -24,6 +29,7 @@ import com.app.abcdadmin.models.Ticket;
 import com.google.android.material.chip.Chip;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
@@ -37,6 +43,7 @@ public class TicketFragment extends Fragment {
     Chip chipPending,chipOpened,chipClosed;
     String type = "";
     Session session;
+    Spinner spinCategory;
 
 
     public TicketFragment() {
@@ -54,6 +61,7 @@ public class TicketFragment extends Fragment {
         chipPending = root.findViewById(R.id.chipPending);
         chipOpened = root.findViewById(R.id.chipOpened);
         chipClosed = root.findViewById(R.id.chipClosed);
+        spinCategory = root.findViewById(R.id.spinCategory);
         mRecyclerView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(activity);
         layoutManager.setReverseLayout(true);
@@ -63,6 +71,64 @@ public class TicketFragment extends Fragment {
         mRecyclerView.addItemDecoration(dividerItemDecoration);
 
         session = new Session(activity);
+
+        FirebaseDatabase.getInstance().getReference(PENDING_TICKET).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()){
+                    int pendcount =  (int)snapshot.getChildrenCount();
+                    chipPending.setText("Pending"+"("+pendcount+")");
+                }
+                else {
+                    chipPending.setText("Pending(0)");
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+
+            }
+        });
+        FirebaseDatabase.getInstance().getReference(OPENED_TICKET).orderByChild(ROLE).equalTo(session.getData(ROLE)).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()){
+                    int count =  (int)snapshot.getChildrenCount();
+                    chipOpened.setText("Opened"+"("+count+")");
+                }
+                else {
+                    chipOpened.setText("Opened(0)");
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+
+            }
+        });
+        FirebaseDatabase.getInstance().getReference(CLOSED_TICKET).orderByChild(ROLE).equalTo(session.getData(ROLE)).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()){
+                    int count =  (int)snapshot.getChildrenCount();
+                    chipClosed.setText("Closed"+"("+count+")");
+                }
+                else {
+                    chipClosed.setText("Closed(0)");
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+
+            }
+        });
 
         readTickets();
 
@@ -90,11 +156,26 @@ public class TicketFragment extends Fragment {
                 }
             }
         });
+        spinCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                readTickets();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
 
         return root;
     }
 
     private void readTickets() {
+
+        chipPending.setText("Pending");
+        chipOpened.setText("Opened");
+        chipClosed.setText("Closed");
 
         mTickets = new ArrayList<>();
         Query reference;
@@ -117,16 +198,26 @@ public class TicketFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 mTickets.clear();
                 if (dataSnapshot.hasChildren()) {
-                    chipPending.setText("Pending"+"("+dataSnapshot.getChildrenCount()+")");
+
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         Ticket user = snapshot.getValue(Ticket.class);
                         assert user != null;
 
                         if (user.getSupport() != null && user.getSupport().equals(session.getData(ROLE))){
-                            mTickets.add(user);
+                            if (user.getCategory() != null && user.getCategory().equals(spinCategory.getSelectedItem().toString())){
+                                mTickets.add(user);
+                            }
                         }
 
                     }
+
+                }
+                if (chipPending.isChecked()){
+                    chipPending.setText("Pending"+"("+mTickets.size()+")");
+                }else if (chipOpened.isChecked()){
+                    chipOpened.setText("Opened"+"("+mTickets.size()+")");
+                }else {
+                    chipClosed.setText("Closed"+"("+mTickets.size()+")");
 
                 }
                 setAdatper();

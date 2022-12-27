@@ -59,4 +59,12 @@
     <string name="lblVoiceRecording">Voice recording</string>
     <string name="msgNoMessage">No message!</string>
 
+    <string-array name="categories">
+        <item>I want to refer friend</item>
+        <item>App issue</item>
+        <item>Withdrawal not received</item>
+        <item>Refer bonus not received</item>
+        <item>Others</item>
+    </string-array>
+
 </resources>

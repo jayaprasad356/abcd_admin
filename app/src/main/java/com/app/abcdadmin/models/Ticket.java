@@ -17,7 +17,6 @@ public class Ticket implements Serializable {
     private String user_id;
     private String name;
     private String category;
-    private String title;
     private String description;
     private String mobile;
     private String support;
@@ -53,14 +52,6 @@ public class Ticket implements Serializable {
 
     public void setCategory(String category) {
         this.category = category;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
     }
 
     public String getDescription() {

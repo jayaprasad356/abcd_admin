@@ -41,23 +41,6 @@
                 android:orientation="horizontal">
 
                 <LinearLayout
-                    android:id="@+id/btnAttachmentDocument"
-                    android:visibility="invisible"
-                    style="@style/AttachmentLinearLayout">
-
-                    <ImageView
-                        style="@style/ActualAttachmentLayout"
-                        android:background="@drawable/btn_attach_1"
-                        android:contentDescription="@string/cDescription"
-                        app:srcCompat="@drawable/ic_small_document"
-                        tools:ignore="UnusedAttribute" />
-
-                    <TextView
-                        style="@style/AttachmentText"
-                        android:text="@string/lblDocument" />
-                </LinearLayout>
-
-                <LinearLayout
                     android:id="@+id/btnAttachmentGallery"
                     style="@style/AttachmentLinearLayout">
 
@@ -75,7 +58,6 @@
 
                 <LinearLayout
                     android:id="@+id/btnAttachmentVideo"
-                    android:visibility="invisible"
                     style="@style/AttachmentLinearLayout">
 
                     <ImageView
@@ -88,18 +70,8 @@
                         style="@style/AttachmentText"
                         android:text="@string/lblVideo" />
                 </LinearLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/padding30"
-                android:orientation="horizontal">
-
                 <LinearLayout
                     android:id="@+id/btnAttachmentAudio"
-                    android:visibility="invisible"
                     style="@style/AttachmentLinearLayout">
 
                     <ImageView
@@ -112,6 +84,35 @@
                         style="@style/AttachmentText"
                         android:text="@string/lblAudio" />
                 </LinearLayout>
+
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/padding30"
+                android:orientation="horizontal">
+                <LinearLayout
+                    android:id="@+id/btnAttachmentDocument"
+                    android:visibility="invisible"
+                    style="@style/AttachmentLinearLayout">
+
+                    <ImageView
+                        style="@style/ActualAttachmentLayout"
+                        android:background="@drawable/btn_attach_1"
+                        android:contentDescription="@string/cDescription"
+                        app:srcCompat="@drawable/ic_small_document"
+                        tools:ignore="UnusedAttribute" />
+
+                    <TextView
+                        style="@style/AttachmentText"
+                        android:text="@string/lblDocument" />
+                </LinearLayout>
+
+
+
 
                 <LinearLayout
                     android:id="@+id/btnAttachmentLocation"

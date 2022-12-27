@@ -138,6 +138,7 @@ public interface IConstants {
     String TYPE_IMAGE = "IMAGE";
     String TYPE_AUDIO = "AUDIO";
     String TYPE = "type";
+    String MOBILE = "mobile";
     String SUPPORT = "support";
     String ROLE = "role";
     String TYPE_VIDEO = "VIDEO";

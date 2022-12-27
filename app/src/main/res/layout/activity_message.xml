@@ -76,6 +76,11 @@
                     android:text="@string/strUsername"
                     android:textColor="@color/white"
                     android:textStyle="bold" />
+                <ImageView
+                    android:id="@+id/imgMobile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_baseline_content_copy_24"/>
             </LinearLayout>
         </androidx.appcompat.widget.Toolbar>
 

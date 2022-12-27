@@ -75,6 +75,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
@@ -100,9 +101,12 @@ import com.bumptech.glide.load.resource.bitmap.GranularRoundedCorners;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -690,6 +694,11 @@ public class Utils {
     }
     public static Query getQueryClosedTicket() {
         return FirebaseDatabase.getInstance().getReference(CLOSED_TICKET).orderByChild(TIMESTAMP);
+    }
+    public static String checKPendingCount(String TicketId) {
+        long count = 0;
+
+        return "";
     }
     public static void setProfileImage(Context context, String imgUrl, ImageView mImageView) {
         try {
