@@ -1,6 +1,7 @@
 package com.app.abcdadmin;
 
 import static com.app.abcdadmin.constants.IConstants.CHAT_SUPPORT;
+import static com.app.abcdadmin.constants.IConstants.FALSE;
 import static com.app.abcdadmin.constants.IConstants.ROLE;
 import static com.app.abcdadmin.constants.IConstants.SUPPORT;
 import static com.app.abcdadmin.constants.IConstants.TRUE;
@@ -39,6 +40,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.app.abcdadmin.managers.Utils;
+import com.app.abcdadmin.models.ChatSupport;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -99,58 +101,69 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
         pendingTicketFragment = new PendingTicketFragment();
         ticketFragment = new TicketFragment();
 
-        if (session.getData(ROLE).equals("Super Admin")){
-            supportSwitch.setVisibility(View.VISIBLE);
-        }
+//        if (session.getData(ROLE).equals("Super Admin")){
+//            supportSwitch.setVisibility(View.VISIBLE);
+//        }
 
-        Query freq = Utils.getQuerySupportStatus();
-        freq.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.hasChildren()){
-                    supportSwitch.setChecked(true);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-        supportSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                progressDialog.setMessage("Loading");
-                progressDialog.show();
-                DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child(CHAT_SUPPORT);
-                if (b){
-
-                    HashMap<String, Object> hashMap = new HashMap<>();
-                    hashMap.put(SUPPORT, TRUE);
-                    ref.updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            progressDialog.dismiss();
-                            Toast.makeText(mActivity, "Chat Enabled", Toast.LENGTH_SHORT).show();
-
-                        }
-                    });
-
-
-                }else {
-                    ref.removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            progressDialog.dismiss();
-                            Toast.makeText(mActivity, "Chat Disabled", Toast.LENGTH_SHORT).show();
-
-
-                        }
-                    });
-
-                }
-            }
-        });
+//        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child(CHAT_SUPPORT);
+//        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                if (snapshot.exists()){
+//                    ChatSupport chatSupport = snapshot.getValue(ChatSupport.class);
+//                    assert chatSupport != null;
+//                    if (chatSupport.isSupport()){
+//                        supportSwitch.setChecked(true);
+//                    }else {
+//
+//
+//                    }
+//
+//                }
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//        });
+//        supportSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+//                progressDialog.setMessage("Loading");
+//                progressDialog.show();
+//                DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child(CHAT_SUPPORT);
+//                if (b){
+//
+//                    HashMap<String, Object> hashMap = new HashMap<>();
+//                    hashMap.put(SUPPORT, TRUE);
+//                    ref.updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+//                        @Override
+//                        public void onComplete(@NonNull Task<Void> task) {
+//                            progressDialog.dismiss();
+//                            Toast.makeText(mActivity, "Chat Enabled", Toast.LENGTH_SHORT).show();
+//
+//                        }
+//                    });
+//
+//
+//                }else {
+//                    HashMap<String, Object> hashMap = new HashMap<>();
+//                    hashMap.put(SUPPORT, FALSE);
+//                    ref.updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+//                        @Override
+//                        public void onComplete(@NonNull Task<Void> task) {
+//                            progressDialog.dismiss();
+//                            Toast.makeText(mActivity, "Chat Disabled", Toast.LENGTH_SHORT).show();
+//
+//                        }
+//                    });
+//
+//
+//                }
+//            }
+//        });
         fm.beginTransaction().replace(R.id.container, ticketFragment).commit();
 
 

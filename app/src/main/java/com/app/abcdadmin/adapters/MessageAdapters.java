@@ -5,7 +5,9 @@ import static com.app.abcdadmin.constants.IConstants.BROADCAST_DOWNLOAD_EVENT;
 import static com.app.abcdadmin.constants.IConstants.COMPLETED;
 import static com.app.abcdadmin.constants.IConstants.CURRENT_ID;
 import static com.app.abcdadmin.constants.IConstants.DOWNLOAD_DATA;
+import static com.app.abcdadmin.constants.IConstants.REF_CHATS;
 import static com.app.abcdadmin.constants.IConstants.SLASH;
+import static com.app.abcdadmin.constants.IConstants.SUPPORT;
 import static com.app.abcdadmin.constants.IConstants.TYPE_AUDIO;
 import static com.app.abcdadmin.constants.IConstants.TYPE_CONTACT;
 import static com.app.abcdadmin.constants.IConstants.TYPE_DOCUMENT;
@@ -18,6 +20,7 @@ import static com.app.abcdadmin.constants.IConstants.ZERO;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,11 +31,14 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.app.abcdadmin.MainActivity;
 import com.app.abcdadmin.R;
 import com.app.abcdadmin.audiowave.AudioPlayerView;
 import com.app.abcdadmin.managers.Screens;
@@ -44,10 +50,13 @@ import com.app.abcdadmin.views.SingleClickListener;
 import com.app.abcdadmin.voiceplayer.RecordingPlayerView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.gson.Gson;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class MessageAdapters extends RecyclerView.Adapter<MessageAdapters.ViewHolder> {
 
@@ -64,6 +73,7 @@ public class MessageAdapters extends RecyclerView.Adapter<MessageAdapters.ViewHo
     private final ArrayList<RecordingPlayerView> myRecList;
     private boolean isAudioPlaying = false, isRecordingPlaying = false;
     private final Screens screens;
+    DatabaseReference reference;
 
     public MessageAdapters(Context mContext, ArrayList<Chat> chatList, String userName, String strCurrentImage, String imageUrl, String currentId) {
         this.mContext = mContext;
@@ -117,6 +127,14 @@ public class MessageAdapters extends RecyclerView.Adapter<MessageAdapters.ViewHo
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder viewHolder, final int position) {
         final Chat chat = mChats.get(position);
+        viewHolder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+
+                showDialog(chat.getId(),chat.getReceiver(),chat.getSender());
+                return false;
+            }
+        });
         final String attachType = chat.getAttachmentType();
         try {
             viewHolder.txtShowMessage.setVisibility(View.GONE);
@@ -579,6 +597,31 @@ public class MessageAdapters extends RecyclerView.Adapter<MessageAdapters.ViewHo
             viewHolder.txtMsgTime.setVisibility(View.GONE);
         }
     }
+
+    private void showDialog(String id, String receiver, String sender) {
+        new AlertDialog.Builder(mContext)
+                .setTitle("Delete Message")
+                .setMessage("Are you sure you want to delete this message?")
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        reference = FirebaseDatabase.getInstance().getReference();
+
+                        reference.child(REF_CHATS).child(receiver).child(sender).child(id).removeValue();
+                        reference.child(REF_CHATS).child(sender).child(receiver).child(id).removeValue();
+                        Toast.makeText(mContext, "Deleted", Toast.LENGTH_SHORT).show();
+
+
+                    }
+                })
+
+                // A null listener allows the button to dismiss the dialog and take no further action.
+                .setNegativeButton(android.R.string.no, null)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
+    }
+
+
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 

@@ -28,6 +28,7 @@ import com.app.abcdadmin.files.FileUtils;
 import com.app.abcdadmin.files.MediaFile;
 import com.app.abcdadmin.files.PickerManager;
 import com.app.abcdadmin.files.PickerManagerCallbacks;
+import com.app.abcdadmin.helper.ApiConfig;
 import com.app.abcdadmin.models.Chat;
 import com.devlomi.record_view.RecordButton;
 import com.devlomi.record_view.RecordView;
@@ -46,10 +47,12 @@ import java.util.ArrayList;
 
 
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
+import static android.os.Build.ID;
 import static com.app.abcdadmin.constants.IConstants.BROADCAST_DOWNLOAD_EVENT;
 import static com.app.abcdadmin.constants.IConstants.CLOSED_TICKET;
 import static com.app.abcdadmin.constants.IConstants.CURRENT_ID;
 import static com.app.abcdadmin.constants.IConstants.DELAY_ONE_SEC;
+import static com.app.abcdadmin.constants.IConstants.DESCRIPTION;
 import static com.app.abcdadmin.constants.IConstants.DOWNLOAD_DATA;
 import static com.app.abcdadmin.constants.IConstants.EMPTY;
 import static com.app.abcdadmin.constants.IConstants.EXTRA_ATTACH_DATA;
@@ -73,9 +76,11 @@ import static com.app.abcdadmin.constants.IConstants.EXTRA_USER_ID;
 import static com.app.abcdadmin.constants.IConstants.EXT_MP3;
 import static com.app.abcdadmin.constants.IConstants.EXT_VCF;
 import static com.app.abcdadmin.constants.IConstants.FALSE;
+import static com.app.abcdadmin.constants.IConstants.FCM_TITLE;
 import static com.app.abcdadmin.constants.IConstants.FCM_URL;
 import static com.app.abcdadmin.constants.IConstants.MOBILE;
 import static com.app.abcdadmin.constants.IConstants.NAME;
+import static com.app.abcdadmin.constants.IConstants.NOTIFY_URL;
 import static com.app.abcdadmin.constants.IConstants.ONE;
 import static com.app.abcdadmin.constants.IConstants.OPENED_TICKET;
 import static com.app.abcdadmin.constants.IConstants.PENDING_TICKET;
@@ -96,9 +101,11 @@ import static com.app.abcdadmin.constants.IConstants.REQUEST_PERMISSION_RECORD;
 import static com.app.abcdadmin.constants.IConstants.ROLE;
 import static com.app.abcdadmin.constants.IConstants.SLASH;
 import static com.app.abcdadmin.constants.IConstants.STATUS_ONLINE;
+import static com.app.abcdadmin.constants.IConstants.SUCCESS;
 import static com.app.abcdadmin.constants.IConstants.SUPPORT;
 import static com.app.abcdadmin.constants.IConstants.TICKET_ID;
 import static com.app.abcdadmin.constants.IConstants.TIMESTAMP;
+import static com.app.abcdadmin.constants.IConstants.TITLE;
 import static com.app.abcdadmin.constants.IConstants.TRUE;
 import static com.app.abcdadmin.constants.IConstants.TWO;
 import static com.app.abcdadmin.constants.IConstants.TYPE;
@@ -106,6 +113,7 @@ import static com.app.abcdadmin.constants.IConstants.TYPE_CONTACT;
 import static com.app.abcdadmin.constants.IConstants.TYPE_IMAGE;
 import static com.app.abcdadmin.constants.IConstants.TYPE_RECORDING;
 import static com.app.abcdadmin.constants.IConstants.TYPE_TEXT;
+import static com.app.abcdadmin.constants.IConstants.USER_ID;
 import static com.app.abcdadmin.constants.IConstants.VIBRATE_HUNDRED;
 import static com.app.abcdadmin.constants.IConstants.ZERO;
 
@@ -177,6 +185,9 @@ import com.wafflecopter.multicontactpicker.LimitColumn;
 import com.wafflecopter.multicontactpicker.MultiContactPicker;
 
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
@@ -186,6 +197,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import retrofit2.Call;
@@ -839,8 +851,6 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
                 try {
                     CropImage.activity(imgUri)
                             .setGuidelines(CropImageView.Guidelines.ON_TOUCH)
-                            .setCropShape(CropImageView.CropShape.RECTANGLE)
-                            .setFixAspectRatio(true)
                             .start(mActivity);
                 } catch (Exception e) {
                     Utils.getErrors(e);
@@ -950,6 +960,7 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
         hashMap.put(EXTRA_DATETIME, Utils.getDateTime());
 
         final String key = Utils.getChatUniqueId();
+        hashMap.put(IConstants.ID, key);
         reference.child(REF_CHATS).child(strSender).child(key).setValue(hashMap);
         reference.child(REF_CHATS).child(strReceiver).child(key).setValue(hashMap);
         Utils.chatSendSound(getApplicationContext());
@@ -970,12 +981,43 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
             }
 
             if (notify) {
-                sendNotification(receiver, strUsername, msg, type);
+                sendNotification(msg);
             }
             notify = false;
         } catch (Exception ignored) {
         }
     }
+
+    private void sendNotification(String msg)
+    {
+        Map<String, String> params = new HashMap<>();
+        params.put(TITLE,"CHAT SUPPORT");
+        params.put(DESCRIPTION,msg);
+        params.put(MOBILE,Mobile);
+        ApiConfig.RequestToVolley((result, response) -> {
+            if (result) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    if (jsonObject.getBoolean(SUCCESS)) {
+
+
+                    }
+
+                } catch (JSONException e){
+                    e.printStackTrace();
+                }
+
+
+
+            }
+
+            //pass url
+        }, MessageActivity.this, NOTIFY_URL, params,true);
+
+
+
+    }
+
     public void moveToOpenTicket(DatabaseReference fromPath, final DatabaseReference toPath, String type)
     {
         fromPath.addListenerForSingleValueEvent(new ValueEventListener()
@@ -1029,43 +1071,7 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
         });
     }
 
-    private void sendNotification(String receiver, final String username, final String message, final String type) {
-        DatabaseReference tokenRef = FirebaseDatabase.getInstance().getReference(REF_TOKENS);
-        Query query = tokenRef.orderByKey().equalTo(receiver);
 
-        query.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.hasChildren()) {
-                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                        Token token = snapshot.getValue(Token.class);
-
-                        final Data data = new Data(currentId, R.drawable.ic_stat_ic_notification, username, message, getString(R.string.strNewMessage), userId, type);
-
-                        assert token != null;
-                        final Sender sender = new Sender(data, token.getToken());
-
-                        apiService.sendNotification(sender).enqueue(new Callback<MyResponse>() {
-                            @Override
-                            public void onResponse(@NotNull Call<MyResponse> call, @NotNull Response<MyResponse> response) {
-                                assert response.code() != 200 || response.body() != null;
-                            }
-
-                            @Override
-                            public void onFailure(@NotNull Call<MyResponse> call, @NotNull Throwable t) {
-
-                            }
-                        });
-
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-            }
-        });
-    }
 
     private void readMessages() {
         chats = new ArrayList<>();

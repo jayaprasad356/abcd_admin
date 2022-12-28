@@ -18,6 +18,7 @@ public interface IConstants {
     String OPENED_TICKET = "opened_ticket";
     String CLOSED_TICKET = "closed_ticket";
     String REF_CHATS = "Chats_v2";
+    String ID = "id";
     String REF_UPLOAD = "Uploads";
     String TIMESTAMP = "timestamp";
     String REF_BLOCK_USERS = "BlockUsers";
@@ -47,6 +48,9 @@ public interface IConstants {
     String BROADCAST_PLAY_RECORDING_EVENT = "com.app.abcdadmin.PLAY_RECORDING_EVENT";
 
 
+    //String MainBaseUrl = "http://192.168.43.38/abcd/";
+    String MainBaseUrl = "https://appadmin.abcdapp.in/";
+    String BaseUrl = MainBaseUrl + "api/";
     String EXTRA_SENDER = "sender";
     String EXTRA_RECEIVER = "receiver";
     String EXTRA_MESSAGE = "message";
@@ -106,7 +110,16 @@ public interface IConstants {
     String FCM_USER = "user";
     String FCM_SENT = "sent";
     String FCM_TITLE = "title";
+    String FCM_ID = "fcm_id";
+    String TITLE = "title";
+    String DESCRIPTION = "description";
+    String USER_ID = "user_id";
+    String MOBILE = "mobile";
+    String SUCCESS = "success";
+    String NOTIFY_URL = BaseUrl + "sendnotify.php";
+    String ADMIN_FCM_URL = BaseUrl + "admin_fcm.php";
     String FCM_BODY = "body";
+    String DATA = "data";
     String FCM_GROUPS = "groups";
     String FCM_USERNAME = "username";
     String FCM_TYPE = "type";
@@ -138,7 +151,6 @@ public interface IConstants {
     String TYPE_IMAGE = "IMAGE";
     String TYPE_AUDIO = "AUDIO";
     String TYPE = "type";
-    String MOBILE = "mobile";
     String SUPPORT = "support";
     String ROLE = "role";
     String TYPE_VIDEO = "VIDEO";
