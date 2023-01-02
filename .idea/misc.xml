@@ -58,6 +58,9 @@
         <entry key="..\:/Studio Projects/AbcdAdmin/app/src/main/res/menu/homescreenmenu.xml" value="0.17552083333333332" />
         <entry key="..\:/Studio Projects/AbcdAdmin/app/src/main/res/menu/popup_menu.xml" value="0.3333333333333333" />
         <entry key="..\:/Studio Projects/AbcdAdmin/record-view/src/main/res/layout/record_view_layout.xml" value="0.17552083333333332" />
+        <entry key="..\:/abcd_admin/app/src/main/res/layout/fragment_ticket.xml" value="0.3145833333333333" />
+        <entry key="..\:/abcd_admin/app/src/main/res/layout/list_tickets.xml" value="0.3145833333333333" />
+        <entry key="..\:/abcd_admin/app/src/main/res/menu/popup_menu.xml" value="0.3145833333333333" />
       </map>
     </option>
   </component>

@@ -28,6 +28,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.CompoundButton;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -59,9 +60,11 @@ public class TicketFragment extends Fragment {
     public TicketAdapters ticketAdapters;
     Activity activity;
     Chip chipPending,chipOpened,chipClosed;
+    Chip chipReferAFriendPending,chipReferAFriendOpened,chipReferAFriendClosed;
     String type = "";
     Session session;
     Spinner spinCategory;
+    LinearLayout lyt;
 
 
     public TicketFragment() {
@@ -80,6 +83,10 @@ public class TicketFragment extends Fragment {
         chipOpened = root.findViewById(R.id.chipOpened);
         chipClosed = root.findViewById(R.id.chipClosed);
         spinCategory = root.findViewById(R.id.spinCategory);
+        lyt = root.findViewById(R.id.Def);
+        chipReferAFriendPending = root.findViewById(R.id.chipReferAFriendPending);
+        chipReferAFriendOpened = root.findViewById(R.id.chipReferAFriendOpened);
+        chipReferAFriendClosed = root.findViewById(R.id.chipReferAFriendClosed);
         mRecyclerView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(activity);
         layoutManager.setReverseLayout(true);
@@ -128,7 +135,11 @@ public class TicketFragment extends Fragment {
 
             }
         });
-        FirebaseDatabase.getInstance().getReference(CLOSED_TICKET).orderByChild(ROLE).equalTo(session.getData(ROLE)).addListenerForSingleValueEvent(new ValueEventListener() {
+        FirebaseDatabase.getInstance()
+                .getReference(CLOSED_TICKET)
+                .orderByChild(ROLE)
+                .equalTo(session.getData(ROLE))
+                .addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()){
@@ -177,7 +188,82 @@ public class TicketFragment extends Fragment {
         spinCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if(adapterView.getSelectedItem().equals("Select Option")) {
+                    lyt.setVisibility(View.VISIBLE);
+                    FirebaseDatabase.getInstance()
+                            .getReference(CLOSED_TICKET)
+                            .orderByChild(ROLE)
+                            .equalTo(session.getData(ROLE))
+                            .addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    if (snapshot.exists()){
+                                        int count =  (int)snapshot.getChildrenCount();
+                                        chipReferAFriendClosed.setText("Closed"+"("+count+")");
+                                    }
+                                    else {
+                                        chipReferAFriendClosed.setText("Closed(0)");
+                                    }
+
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
+
+
+                                }
+                            });
+                    FirebaseDatabase.getInstance()
+                            .getReference(OPENED_TICKET)
+                            .orderByChild(ROLE)
+                            .equalTo(session.getData(ROLE))
+                            .addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    if (snapshot.exists()){
+                                        int count =  (int)snapshot.getChildrenCount();
+                                        chipReferAFriendOpened.setText("Opened"+"("+count+")");
+                                    }
+                                    else {
+                                        chipReferAFriendOpened.setText("Opened(0)");
+                                    }
+
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
+
+
+                                }
+                            });
+                    FirebaseDatabase.getInstance()
+                            .getReference(PENDING_TICKET)
+                            .orderByChild(ROLE)
+                            .equalTo(session.getData(ROLE))
+                            .addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    if (snapshot.exists()){
+                                        int count =  (int)snapshot.getChildrenCount();
+                                        chipReferAFriendPending.setText("Pending"+"("+count+")");
+                                    }
+                                    else {
+                                        chipReferAFriendPending.setText("Closed(0)");
+                                    }
+
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
+
+
+                                }
+                            });
+                }else{
+                    lyt.setVisibility(View.GONE);
+                }
                 readTickets();
+
             }
 
             @Override

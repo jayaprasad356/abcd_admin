@@ -60,6 +60,7 @@
     <string name="msgNoMessage">No message!</string>
 
     <string-array name="categories">
+        <item>Select Option</item>
         <item>I want to refer friend</item>
         <item>App issue</item>
         <item>Withdrawal not received</item>
