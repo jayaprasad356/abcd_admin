@@ -251,6 +251,7 @@ public class TicketFragment extends Fragment {
                                         chipReferAFriendPending.setText("Closed(0)");
                                     }
 
+
                                 }
 
                                 @Override
