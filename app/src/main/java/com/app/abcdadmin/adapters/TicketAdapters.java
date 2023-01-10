@@ -14,6 +14,7 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -57,6 +58,10 @@ public class TicketAdapters extends RecyclerView.Adapter<TicketAdapters.ViewHold
         viewHolder.tvMobile.setText(ticket.getMobile());
         viewHolder.tvDescription.setText(ticket.getDescription());
         viewHolder.tvCategory.setText(ticket.getCategory());
+
+        if (ticket.getReply() != null && ticket.getReply().equals("true")){
+            viewHolder.imgReplyIndicator.setVisibility(View.VISIBLE);
+        }
         viewHolder.itemView.setOnClickListener(new SingleClickListener() {
             @Override
             public void onClickView(View v) {
@@ -86,6 +91,7 @@ public class TicketAdapters extends RecyclerView.Adapter<TicketAdapters.ViewHold
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public final TextView tvName,tvMobile,tvDescription,tvCategory;
+        public final ImageView imgReplyIndicator;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -94,6 +100,7 @@ public class TicketAdapters extends RecyclerView.Adapter<TicketAdapters.ViewHold
             tvMobile = itemView.findViewById(R.id.tvMobile);
             tvDescription = itemView.findViewById(R.id.tvDescription);
             tvCategory = itemView.findViewById(R.id.tvCategory);
+            imgReplyIndicator = itemView.findViewById(R.id.imgReplyIndicator);
         }
     }
 

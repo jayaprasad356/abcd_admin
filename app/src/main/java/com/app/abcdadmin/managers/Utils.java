@@ -15,6 +15,7 @@ import static com.app.abcdadmin.constants.IConstants.EXT_VCF;
 import static com.app.abcdadmin.constants.IConstants.FALSE;
 import static com.app.abcdadmin.constants.IConstants.IMG_DEFAULTS;
 import static com.app.abcdadmin.constants.IConstants.IMG_FOLDER;
+import static com.app.abcdadmin.constants.IConstants.MOBILE;
 import static com.app.abcdadmin.constants.IConstants.OPENED_TICKET;
 import static com.app.abcdadmin.constants.IConstants.PENDING_TICKET;
 import static com.app.abcdadmin.constants.IConstants.REF_CHATS;
@@ -223,6 +224,15 @@ public class Utils {
         return mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(uri));
     }
 
+    public static Query getQueryPendingTicketByMyId(String mobile) {
+        return FirebaseDatabase.getInstance().getReference(PENDING_TICKET).orderByChild(MOBILE).equalTo(mobile);
+    }
+    public static Query getQueryOpenedTicketByMyId(String mobile) {
+        return FirebaseDatabase.getInstance().getReference(OPENED_TICKET).orderByChild(MOBILE).equalTo(mobile);
+    }
+    public static Query getQueryClosedTicketByMyId(String mobile) {
+        return FirebaseDatabase.getInstance().getReference(CLOSED_TICKET).orderByChild(MOBILE).equalTo(mobile);
+    }
     private static long getVideoDurationValidation(Context context, File file) {
         try {
             final MediaMetadataRetriever retriever = new MediaMetadataRetriever();

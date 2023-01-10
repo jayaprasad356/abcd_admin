@@ -1,6 +1,7 @@
 package com.app.abcdadmin.adapters;
 
 
+import static android.content.Context.CLIPBOARD_SERVICE;
 import static com.app.abcdadmin.constants.IConstants.BROADCAST_DOWNLOAD_EVENT;
 import static com.app.abcdadmin.constants.IConstants.COMPLETED;
 import static com.app.abcdadmin.constants.IConstants.CURRENT_ID;
@@ -19,6 +20,9 @@ import static com.app.abcdadmin.constants.IConstants.TYPE_VIDEO;
 import static com.app.abcdadmin.constants.IConstants.ZERO;
 
 import android.app.Activity;
+import android.app.Dialog;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -74,6 +78,7 @@ public class MessageAdapters extends RecyclerView.Adapter<MessageAdapters.ViewHo
     private boolean isAudioPlaying = false, isRecordingPlaying = false;
     private final Screens screens;
     DatabaseReference reference;
+    boolean textmsg = false;
 
     public MessageAdapters(Context mContext, ArrayList<Chat> chatList, String userName, String strCurrentImage, String imageUrl, String currentId) {
         this.mContext = mContext;
@@ -101,6 +106,7 @@ public class MessageAdapters extends RecyclerView.Adapter<MessageAdapters.ViewHo
 
     private void showTextLayout(final ViewHolder viewHolder, final Chat chat) {
         try {
+            textmsg = true;
             viewHolder.txtShowMessage.setVisibility(View.VISIBLE);
             viewHolder.txtShowMessage.setText(chat.getMessage());
         } catch (Exception e) {
@@ -130,8 +136,9 @@ public class MessageAdapters extends RecyclerView.Adapter<MessageAdapters.ViewHo
         viewHolder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
+                showDialog(chat.getId(),chat.getReceiver(),chat.getSender(),chat.getMessage());
 
-                showDialog(chat.getId(),chat.getReceiver(),chat.getSender());
+                //showDialog(chat.getId(),chat.getReceiver(),chat.getSender());
                 return false;
             }
         });
@@ -598,27 +605,36 @@ public class MessageAdapters extends RecyclerView.Adapter<MessageAdapters.ViewHo
         }
     }
 
-    private void showDialog(String id, String receiver, String sender) {
-        new AlertDialog.Builder(mContext)
-                .setTitle("Delete Message")
-                .setMessage("Are you sure you want to delete this message?")
-                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
+    private void showDialog(String id, String receiver, String sender, String message) {
+        Dialog dialog;
+        dialog = new Dialog(mContext);
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        dialog.setContentView(R.layout.chat_dialog_layout);
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
-                        reference = FirebaseDatabase.getInstance().getReference();
+        Button btnCopy = dialog.findViewById(R.id.btnCopy);
+        Button btnDelete = dialog.findViewById(R.id.btnDelete);
+        if (textmsg){
+            btnCopy.setVisibility(View.VISIBLE);
+        }
+        btnCopy.setOnClickListener(view -> {
+            ClipboardManager clipboard = (ClipboardManager) mContext.getSystemService(CLIPBOARD_SERVICE);
+            ClipData clip = ClipData.newPlainText("text", message);
+            clipboard.setPrimaryClip(clip);
+            Toast.makeText(mContext, "Copied", Toast.LENGTH_SHORT).show();
+        });
 
-                        reference.child(REF_CHATS).child(receiver).child(sender).child(id).removeValue();
-                        reference.child(REF_CHATS).child(sender).child(receiver).child(id).removeValue();
-                        Toast.makeText(mContext, "Deleted", Toast.LENGTH_SHORT).show();
+        btnDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                reference = FirebaseDatabase.getInstance().getReference();
 
-
-                    }
-                })
-
-                // A null listener allows the button to dismiss the dialog and take no further action.
-                .setNegativeButton(android.R.string.no, null)
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .show();
+                reference.child(REF_CHATS).child(receiver).child(sender).child(id).removeValue();
+                reference.child(REF_CHATS).child(sender).child(receiver).child(id).removeValue();
+                Toast.makeText(mContext, "Deleted", Toast.LENGTH_SHORT).show();
+            }
+        });
+        dialog.show();
     }
 
 

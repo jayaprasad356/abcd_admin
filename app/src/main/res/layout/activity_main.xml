@@ -60,11 +60,14 @@
                     android:layout_gravity="end"
                     android:orientation="horizontal">
 
-                    <com.google.android.material.switchmaterial.SwitchMaterial
-                        android:id="@+id/supportSwitch"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:visibility="gone" />
+                    <ImageView
+                        android:id="@+id/imgSearch"
+                        android:layout_width="@dimen/_30sdp"
+                        android:layout_height="@dimen/_30sdp"
+                        android:layout_margin="@dimen/_10sdp"
+                        android:padding="@dimen/_5sdp"
+                        android:src="@drawable/ic_action_search"
+                        app:tint="@color/white" />
 
                     <ImageView
                         android:id="@+id/imgMenu"

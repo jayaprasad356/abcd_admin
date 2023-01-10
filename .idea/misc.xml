@@ -17,7 +17,9 @@
         <entry key="..\:/Studio Projects/AbcdAdmin/app/src/main/res/drawable/ic_arrow_back.xml" value="0.129" />
         <entry key="..\:/Studio Projects/AbcdAdmin/app/src/main/res/drawable/ic_attach_camera.xml" value="0.129" />
         <entry key="..\:/Studio Projects/AbcdAdmin/app/src/main/res/drawable/ic_attach_file.xml" value="0.129" />
+        <entry key="..\:/Studio Projects/AbcdAdmin/app/src/main/res/drawable/ic_baseline_circle_24.xml" value="0.129" />
         <entry key="..\:/Studio Projects/AbcdAdmin/app/src/main/res/drawable/ic_baseline_content_copy_24.xml" value="0.129" />
+        <entry key="..\:/Studio Projects/AbcdAdmin/app/src/main/res/drawable/ic_baseline_search_24.xml" value="0.129" />
         <entry key="..\:/Studio Projects/AbcdAdmin/app/src/main/res/drawable/ic_chat.xml" value="0.129" />
         <entry key="..\:/Studio Projects/AbcdAdmin/app/src/main/res/drawable/ic_check_delivery.xml" value="0.129" />
         <entry key="..\:/Studio Projects/AbcdAdmin/app/src/main/res/drawable/ic_check_read.xml" value="0.129" />
@@ -38,8 +40,10 @@
         <entry key="..\:/Studio Projects/AbcdAdmin/app/src/main/res/layout/activity_image_viewer.xml" value="0.16145833333333334" />
         <entry key="..\:/Studio Projects/AbcdAdmin/app/src/main/res/layout/activity_login.xml" value="0.22" />
         <entry key="..\:/Studio Projects/AbcdAdmin/app/src/main/res/layout/activity_main.xml" value="0.3333333333333333" />
-        <entry key="..\:/Studio Projects/AbcdAdmin/app/src/main/res/layout/activity_message.xml" value="0.4466666666666667" />
+        <entry key="..\:/Studio Projects/AbcdAdmin/app/src/main/res/layout/activity_message.xml" value="0.3333333333333333" />
+        <entry key="..\:/Studio Projects/AbcdAdmin/app/src/main/res/layout/activity_search.xml" value="0.22" />
         <entry key="..\:/Studio Projects/AbcdAdmin/app/src/main/res/layout/activity_splash.xml" value="0.17552083333333332" />
+        <entry key="..\:/Studio Projects/AbcdAdmin/app/src/main/res/layout/chat_dialog_layout.xml" value="0.17552083333333332" />
         <entry key="..\:/Studio Projects/AbcdAdmin/app/src/main/res/layout/dailog_layout.xml" value="0.144017094017094" />
         <entry key="..\:/Studio Projects/AbcdAdmin/app/src/main/res/layout/dialog_custom.xml" value="0.17552083333333332" />
         <entry key="..\:/Studio Projects/AbcdAdmin/app/src/main/res/layout/fragment_base.xml" value="0.16145833333333334" />
@@ -58,9 +62,6 @@
         <entry key="..\:/Studio Projects/AbcdAdmin/app/src/main/res/menu/homescreenmenu.xml" value="0.17552083333333332" />
         <entry key="..\:/Studio Projects/AbcdAdmin/app/src/main/res/menu/popup_menu.xml" value="0.3333333333333333" />
         <entry key="..\:/Studio Projects/AbcdAdmin/record-view/src/main/res/layout/record_view_layout.xml" value="0.17552083333333332" />
-        <entry key="..\:/abcd_admin/app/src/main/res/layout/fragment_ticket.xml" value="0.3145833333333333" />
-        <entry key="..\:/abcd_admin/app/src/main/res/layout/list_tickets.xml" value="0.3145833333333333" />
-        <entry key="..\:/abcd_admin/app/src/main/res/menu/popup_menu.xml" value="0.3145833333333333" />
       </map>
     </option>
   </component>

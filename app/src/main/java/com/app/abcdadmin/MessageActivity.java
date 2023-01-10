@@ -95,6 +95,7 @@ import static com.app.abcdadmin.constants.IConstants.REF_OTHERS;
 import static com.app.abcdadmin.constants.IConstants.REF_TOKENS;
 import static com.app.abcdadmin.constants.IConstants.REF_USERS;
 import static com.app.abcdadmin.constants.IConstants.REF_VIDEO_THUMBS;
+import static com.app.abcdadmin.constants.IConstants.REPLY;
 import static com.app.abcdadmin.constants.IConstants.REQUEST_CODE_CONTACT;
 import static com.app.abcdadmin.constants.IConstants.REQUEST_CODE_PLAY_SERVICES;
 import static com.app.abcdadmin.constants.IConstants.REQUEST_PERMISSION_RECORD;
@@ -257,7 +258,7 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
     private Uri imgUri;
     private TextView txtUsername;
     private ImageView imgSuperAdmin,imgCloseTicket;
-    private String type,Mobile;
+    private String type,Mobile,TicketType;
     private RelativeLayout bottomChatLayout;
     ImageView imgMobile;
 
@@ -276,10 +277,6 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
 
 
         currentId = "admin_1";
-
-
-
-
         reference = FirebaseDatabase.getInstance().getReference(REF_USERS).child(currentId);
         reference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -302,6 +299,7 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
         userId = intent.getStringExtra(EXTRA_USER_ID);
         ticketId = intent.getStringExtra(TICKET_ID);
         type = intent.getStringExtra(TYPE);
+        TicketType = intent.getStringExtra(TYPE);
         Mobile = intent.getStringExtra(MOBILE);
         Name = intent.getStringExtra(NAME);
         txtUsername.setText(Name);
@@ -963,6 +961,11 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
         hashMap.put(IConstants.ID, key);
         reference.child(REF_CHATS).child(strSender).child(key).setValue(hashMap);
         reference.child(REF_CHATS).child(strReceiver).child(key).setValue(hashMap);
+
+
+        HashMap<String, Object> hashMap2 = new HashMap<>();
+        hashMap2.put(REPLY, "false");
+        reference.child(TicketType).child(ticketId).updateChildren(hashMap2);
         Utils.chatSendSound(getApplicationContext());
 
         try {
@@ -1049,9 +1052,7 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
                                 toPath.updateChildren(hashMap);
                                 DatabaseReference ref1 = FirebaseDatabase.getInstance().getReference().child(OPENED_TICKET).child(ticketId);
                                 ref1.removeValue();
-                                Intent intent = new Intent(mActivity,MainActivity.class);
-                                startActivity(intent);
-                                finish();
+                                onBackPressed();
                             }
 
                         }

@@ -21,6 +21,7 @@ public class Ticket implements Serializable {
     private String mobile;
     private String support;
     private String type;
+    private String reply;
 
     public String getId() {
         return id;
@@ -84,5 +85,13 @@ public class Ticket implements Serializable {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getReply() {
+        return reply;
+    }
+
+    public void setReply(String reply) {
+        this.reply = reply;
     }
 }

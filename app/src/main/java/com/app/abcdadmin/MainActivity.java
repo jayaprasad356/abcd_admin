@@ -71,8 +71,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
     private long exitTime = 0;
     Fragment chatFragment,pendingTicketFragment,ticketFragment;
     public static FragmentManager fm = null;
-    ImageView imgMenu;
-    SwitchMaterial supportSwitch;
+    ImageView imgMenu,imgSearch;
     ProgressDialog progressDialog;
 
 
@@ -83,7 +82,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
         mImageView = findViewById(R.id.imageView);
         mTxtUsername = findViewById(R.id.txtUsername);
         imgMenu = findViewById(R.id.imgMenu);
-        supportSwitch = findViewById(R.id.supportSwitch);
+        imgSearch = findViewById(R.id.imgSearch);
         fm = getSupportFragmentManager();
         progressDialog = new ProgressDialog(this);
         final Toolbar mToolbar = findViewById(R.id.toolbar);
@@ -101,69 +100,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
         pendingTicketFragment = new PendingTicketFragment();
         ticketFragment = new TicketFragment();
 
-//        if (session.getData(ROLE).equals("Super Admin")){
-//            supportSwitch.setVisibility(View.VISIBLE);
-//        }
 
-//        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child(CHAT_SUPPORT);
-//        ref.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                if (snapshot.exists()){
-//                    ChatSupport chatSupport = snapshot.getValue(ChatSupport.class);
-//                    assert chatSupport != null;
-//                    if (chatSupport.isSupport()){
-//                        supportSwitch.setChecked(true);
-//                    }else {
-//
-//
-//                    }
-//
-//                }
-//
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//
-//            }
-//        });
-//        supportSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//            @Override
-//            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-//                progressDialog.setMessage("Loading");
-//                progressDialog.show();
-//                DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child(CHAT_SUPPORT);
-//                if (b){
-//
-//                    HashMap<String, Object> hashMap = new HashMap<>();
-//                    hashMap.put(SUPPORT, TRUE);
-//                    ref.updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
-//                        @Override
-//                        public void onComplete(@NonNull Task<Void> task) {
-//                            progressDialog.dismiss();
-//                            Toast.makeText(mActivity, "Chat Enabled", Toast.LENGTH_SHORT).show();
-//
-//                        }
-//                    });
-//
-//
-//                }else {
-//                    HashMap<String, Object> hashMap = new HashMap<>();
-//                    hashMap.put(SUPPORT, FALSE);
-//                    ref.updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
-//                        @Override
-//                        public void onComplete(@NonNull Task<Void> task) {
-//                            progressDialog.dismiss();
-//                            Toast.makeText(mActivity, "Chat Disabled", Toast.LENGTH_SHORT).show();
-//
-//                        }
-//                    });
-//
-//
-//                }
-//            }
-//        });
         fm.beginTransaction().replace(R.id.container, ticketFragment).commit();
 
 
@@ -171,6 +108,13 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
             @Override
             public void onClick(View view) {
                 showpopup(view);
+            }
+        });
+        imgSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(mActivity,SearchActivity.class);
+                startActivity(intent);
             }
         });
 

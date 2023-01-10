@@ -71,281 +71,207 @@
         android:visibility="visible"
         android:orientation="vertical">
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
+            android:orientation="vertical">
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_centerInParent="true"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="10dp"
-                android:text="Refer a friend"
-                android:textColor="@color/black"
-                android:textSize="15sp"
-                android:textStyle="bold" />
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:text="Refer a friend"
+                    android:textColor="@color/black"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:id="@+id/tvPendingCount1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Pending = 234"/>
+                    <TextView
+                        android:id="@+id/tvOpenedCount1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_5sdp"
+                        android:text="Opened = 234"/>
+                    <TextView
+                        android:id="@+id/tvClosedCount1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_5sdp"
+                        android:text="Closed = 234"/>
+                </LinearLayout>
 
-            <com.google.android.material.chip.ChipGroup
-                android:id="@+id/chipGroup"
+            </LinearLayout>
+            <LinearLayout
+                android:layout_marginTop="@dimen/_10sdp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_marginEnd="20dp"
-                app:singleSelection="true">
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chipReferAFriendPending"
-                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:orientation="vertical">
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:checked="true"
-                    android:text="Pending"
-                    android:textColor="@color/white"
-                    app:chipBackgroundColor="@color/bg_pending" />
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chipReferAFriendOpened"
-                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:text="App issue"
+                    android:textColor="@color/black"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Opened"
-                    android:textColor="@color/white"
-                    app:chipBackgroundColor="@color/bg_open" />
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:id="@+id/tvPendingCount2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Pending = 234"/>
+                    <TextView
+                        android:id="@+id/tvOpenedCount2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_5sdp"
+                        android:text="Opened = 234"/>
+                    <TextView
+                        android:id="@+id/tvClosedCount2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_5sdp"
+                        android:text="Closed = 234"/>
+                </LinearLayout>
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chipReferAFriendClosed"
-                    style="@style/Widget.MaterialComponents.Chip.Choice"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Closed"
-                    android:textColor="@color/white"
-                    app:chipBackgroundColor="@color/bg_closed" />
-
-            </com.google.android.material.chip.ChipGroup>
-        </RelativeLayout>
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
+            </LinearLayout>
+            <LinearLayout
+                android:layout_marginTop="@dimen/_10sdp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_centerInParent="true"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="10dp"
-                android:text="App issue"
-                android:textColor="@color/black"
-                android:textSize="15sp"
-                android:textStyle="bold" />
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:text="Withdrawl issue"
+                    android:textColor="@color/black"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:id="@+id/tvPendingCount3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        tools:text="Pending = 234"/>
+                    <TextView
+                        android:id="@+id/tvOpenedCount3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_5sdp"
+                        tools:text="Opened = 234"/>
+                    <TextView
+                        android:id="@+id/tvClosedCount3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_5sdp"
+                        tools:text="Closed = 234"/>
+                </LinearLayout>
 
-            <com.google.android.material.chip.ChipGroup
-                android:id="@+id/chipGroup"
-                android:layout_alignParentEnd="true"
+            </LinearLayout>
+            <LinearLayout
+                android:layout_marginTop="@dimen/_10sdp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="20dp"
-                app:singleSelection="true">
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chipPending"
-                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:orientation="vertical">
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:checked="true"
-                    android:text="Pending"
-                    android:textColor="@color/white"
-                    app:chipBackgroundColor="@color/bg_pending" />
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chipOpened"
-                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:text="Refers bonus issue"
+                    android:textColor="@color/black"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Opened"
-                    android:textColor="@color/white"
-                    app:chipBackgroundColor="@color/bg_open" />
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:id="@+id/tvPendingCount4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        tools:text="Pending = 234"/>
+                    <TextView
+                        android:id="@+id/tvOpenedCount4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_5sdp"
+                        tools:text="Opened = 234"/>
+                    <TextView
+                        android:id="@+id/tvClosedCount4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_5sdp"
+                        tools:text="Closed = 234"/>
+                </LinearLayout>
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chipClosed"
-                    style="@style/Widget.MaterialComponents.Chip.Choice"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Closed"
-                    android:textColor="@color/white"
-                    app:chipBackgroundColor="@color/bg_closed" />
-
-            </com.google.android.material.chip.ChipGroup>
-        </RelativeLayout>
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
+            </LinearLayout>
+            <LinearLayout
+                android:layout_marginTop="@dimen/_10sdp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_centerInParent="true"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="10dp"
-                android:text="Withdrawl issue"
-                android:textColor="@color/black"
-                android:textSize="15sp"
-                android:textStyle="bold" />
-
-            <com.google.android.material.chip.ChipGroup
-                android:id="@+id/chipGroup"
-                android:layout_alignParentEnd="true"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="20dp"
-                app:singleSelection="true">
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chipPending"
-                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:orientation="vertical">
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:checked="true"
-                    android:text="Pending"
-                    android:textColor="@color/white"
-                    app:chipBackgroundColor="@color/bg_pending" />
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chipOpened"
-                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:text="Others"
+                    android:textColor="@color/black"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Opened"
-                    android:textColor="@color/white"
-                    app:chipBackgroundColor="@color/bg_open" />
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:id="@+id/tvPendingCount5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        tools:text="Pending = 234"/>
+                    <TextView
+                        android:id="@+id/tvOpenedCount5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_5sdp"
+                        tools:text="Opened = 234"/>
+                    <TextView
+                        android:id="@+id/tvClosedCount5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_5sdp"
+                        tools:text="Closed = 234"/>
+                </LinearLayout>
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chipClosed"
-                    style="@style/Widget.MaterialComponents.Chip.Choice"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Closed"
-                    android:textColor="@color/white"
-                    app:chipBackgroundColor="@color/bg_closed" />
+            </LinearLayout>
 
-            </com.google.android.material.chip.ChipGroup>
-        </RelativeLayout>
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_centerInParent="true"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="10dp"
-                android:text="Refers bonus issue"
-                android:textColor="@color/black"
-                android:textSize="15sp"
-                android:textStyle="bold" />
 
-            <com.google.android.material.chip.ChipGroup
-                android:id="@+id/chipGroup"
-                android:layout_alignParentEnd="true"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="20dp"
-                app:singleSelection="true">
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chipPending"
-                    style="@style/Widget.MaterialComponents.Chip.Choice"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:checked="true"
-                    android:text="Pending"
-                    android:textColor="@color/white"
-                    app:chipBackgroundColor="@color/bg_pending" />
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chipOpened"
-                    style="@style/Widget.MaterialComponents.Chip.Choice"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Opened"
-                    android:textColor="@color/white"
-                    app:chipBackgroundColor="@color/bg_open" />
+        </LinearLayout>
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chipClosed"
-                    style="@style/Widget.MaterialComponents.Chip.Choice"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Closed"
-                    android:textColor="@color/white"
-                    app:chipBackgroundColor="@color/bg_closed" />
 
-            </com.google.android.material.chip.ChipGroup>
-        </RelativeLayout>
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_centerInParent="true"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="10dp"
-                android:text="Others"
-                android:textColor="@color/black"
-                android:textSize="15sp"
-                android:textStyle="bold" />
-
-            <com.google.android.material.chip.ChipGroup
-                android:id="@+id/chipGroup"
-                android:layout_alignParentEnd="true"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="20dp"
-                app:singleSelection="true">
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chipPending"
-                    style="@style/Widget.MaterialComponents.Chip.Choice"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:checked="true"
-                    android:text="Pending"
-                    android:textColor="@color/white"
-                    app:chipBackgroundColor="@color/bg_pending" />
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chipOpened"
-                    style="@style/Widget.MaterialComponents.Chip.Choice"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Opened"
-                    android:textColor="@color/white"
-                    app:chipBackgroundColor="@color/bg_open" />
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chipClosed"
-                    style="@style/Widget.MaterialComponents.Chip.Choice"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Closed"
-                    android:textColor="@color/white"
-                    app:chipBackgroundColor="@color/bg_closed" />
-
-            </com.google.android.material.chip.ChipGroup>
-        </RelativeLayout>
 
     </LinearLayout>
 
@@ -353,7 +279,7 @@
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/hori"
+        android:layout_below="@+id/Def"
         android:background="@android:color/transparent"
         app:fastScrollPopupBgColor="@color/colorAccent"
         app:fastScrollPopupTextColor="@android:color/primary_text_dark"
