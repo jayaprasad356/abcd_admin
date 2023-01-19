@@ -41,7 +41,7 @@ public class FavoriteMessageActivity extends AppCompatActivity {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(activity);
         recyclerView.setLayoutManager(linearLayoutManager);
 
-        FavAdapter adapter = new FavAdapter(data,onSelectedListener);
+        FavAdapter adapter = new FavAdapter(data,onSelectedListener,activity);
         recyclerView.setAdapter(adapter);
     }
 

@@ -23,7 +23,7 @@ public class FavAdapter extends RecyclerView.Adapter<FavAdapter.ViewHolder> {
     ArrayList<Messages> messages;
     private List<String> mData;
     private OnSelectedListener onSelectedListener;
-
+    Boolean multi = false;
 
 //    public FavAdapter(ArrayList<Messages> messages, Activity activity) {
 //        this.messages = messages;
@@ -31,9 +31,10 @@ public class FavAdapter extends RecyclerView.Adapter<FavAdapter.ViewHolder> {
 //    }
 
 
-    public FavAdapter(List<String> data, OnSelectedListener onSelectedListener) {
+    public FavAdapter(List<String> data, OnSelectedListener onSelectedListener, Activity activity) {
         this.mData = data;
         this.onSelectedListener = onSelectedListener;
+        this.activity = activity;
     }
 
 
@@ -47,11 +48,21 @@ public class FavAdapter extends RecyclerView.Adapter<FavAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, @SuppressLint("RecyclerView") int position) {
+
         holder.message.setText(mData.get(position));
+        holder.message.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                multi = true;
+                holder.message.setBackgroundColor(activity.getColor(R.color.bg_closed));
+                return false;
+            }
+        });
         holder.message.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onSelectedListener.onSuccess(mData.get(position));
+                if (!multi)
+                    onSelectedListener.onSuccess(mData.get(position));
             }
         });
 
