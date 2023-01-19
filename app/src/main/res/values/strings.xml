@@ -54,6 +54,7 @@
     <string name="lblAudio">Audio</string>
     <string name="lblVideo">Video</string>
     <string name="lblDocument">Document</string>
+    <string name="lblFavore">Favorite</string>
     <string name="lblContact">Contact</string>
     <string name="lblLocation">Location</string>
     <string name="lblVoiceRecording">Voice recording</string>

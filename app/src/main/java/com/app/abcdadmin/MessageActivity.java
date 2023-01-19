@@ -30,6 +30,7 @@ import com.app.abcdadmin.files.PickerManager;
 import com.app.abcdadmin.files.PickerManagerCallbacks;
 import com.app.abcdadmin.helper.ApiConfig;
 import com.app.abcdadmin.models.Chat;
+import com.app.abcdadmin.voiceplayer.FavoriteMessageActivity;
 import com.devlomi.record_view.RecordButton;
 import com.devlomi.record_view.RecordView;
 import com.google.firebase.database.Query;
@@ -451,7 +452,7 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
         findViewById(R.id.btnAttachmentGallery).setOnClickListener(this);
         findViewById(R.id.btnAttachmentAudio).setOnClickListener(this);
         findViewById(R.id.btnAttachmentLocation).setOnClickListener(this);
-        findViewById(R.id.btnAttachmentDocument).setOnClickListener(this);
+        findViewById(R.id.btnAttachmentFavorite).setOnClickListener(this);
 
         recordView = findViewById(R.id.recordView);
         recordButton = findViewById(R.id.recordButton);
@@ -706,9 +707,11 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
         } else if (id == R.id.btnAttachmentVideo) {
             hideAttachmentView();
             openVideoPicker();
-        } else if (id == R.id.btnAttachmentDocument) {
+        } else if (id == R.id.btnAttachmentFavorite) {
             hideAttachmentView();
-            openDocumentPicker();
+            Intent intent=new Intent(MessageActivity.this, FavoriteMessageActivity.class);
+            startActivityForResult(intent,1);
+            // openDocumentPicker();
         } else if (id == R.id.btnAttachmentContact) {
             hideAttachmentView();
             openContactPicker();
@@ -1539,6 +1542,11 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
                 case REQUEST_CODE_PLAY_SERVICES:
                     openPlacePicker();
             }
+        }
+        if (resultCode==101 && requestCode==1){
+            String message = data.getStringExtra("message");
+            newMessage.setText(message);
+            clickToSend();
         }
     }
 

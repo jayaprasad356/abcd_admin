@@ -95,20 +95,20 @@
                 android:layout_marginTop="@dimen/padding30"
                 android:orientation="horizontal">
                 <LinearLayout
-                    android:id="@+id/btnAttachmentDocument"
-                    android:visibility="invisible"
+                    android:id="@+id/btnAttachmentFavorite"
+                    android:visibility="visible"
                     style="@style/AttachmentLinearLayout">
 
                     <ImageView
                         style="@style/ActualAttachmentLayout"
                         android:background="@drawable/btn_attach_1"
                         android:contentDescription="@string/cDescription"
-                        app:srcCompat="@drawable/ic_small_document"
+                        app:srcCompat="@drawable/ic_baseline_favorite_24"
                         tools:ignore="UnusedAttribute" />
 
                     <TextView
                         style="@style/AttachmentText"
-                        android:text="@string/lblDocument" />
+                        android:text="@string/lblFavore" />
                 </LinearLayout>
 
 
