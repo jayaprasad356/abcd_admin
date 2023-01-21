@@ -14,10 +14,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.webkit.MimeTypeMap;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -48,10 +46,8 @@ import java.util.ArrayList;
 
 
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
-import static android.os.Build.ID;
 import static com.app.abcdadmin.constants.IConstants.BROADCAST_DOWNLOAD_EVENT;
 import static com.app.abcdadmin.constants.IConstants.CLOSED_TICKET;
-import static com.app.abcdadmin.constants.IConstants.CURRENT_ID;
 import static com.app.abcdadmin.constants.IConstants.DELAY_ONE_SEC;
 import static com.app.abcdadmin.constants.IConstants.DESCRIPTION;
 import static com.app.abcdadmin.constants.IConstants.DOWNLOAD_DATA;
@@ -77,7 +73,6 @@ import static com.app.abcdadmin.constants.IConstants.EXTRA_USER_ID;
 import static com.app.abcdadmin.constants.IConstants.EXT_MP3;
 import static com.app.abcdadmin.constants.IConstants.EXT_VCF;
 import static com.app.abcdadmin.constants.IConstants.FALSE;
-import static com.app.abcdadmin.constants.IConstants.FCM_TITLE;
 import static com.app.abcdadmin.constants.IConstants.FCM_URL;
 import static com.app.abcdadmin.constants.IConstants.MOBILE;
 import static com.app.abcdadmin.constants.IConstants.NAME;
@@ -93,7 +88,6 @@ import static com.app.abcdadmin.constants.IConstants.REF_CHATS;
 import static com.app.abcdadmin.constants.IConstants.REF_CHAT_ATTACHMENT;
 import static com.app.abcdadmin.constants.IConstants.REF_CHAT_PHOTO_UPLOAD;
 import static com.app.abcdadmin.constants.IConstants.REF_OTHERS;
-import static com.app.abcdadmin.constants.IConstants.REF_TOKENS;
 import static com.app.abcdadmin.constants.IConstants.REF_USERS;
 import static com.app.abcdadmin.constants.IConstants.REF_VIDEO_THUMBS;
 import static com.app.abcdadmin.constants.IConstants.REPLY;
@@ -106,7 +100,6 @@ import static com.app.abcdadmin.constants.IConstants.STATUS_ONLINE;
 import static com.app.abcdadmin.constants.IConstants.SUCCESS;
 import static com.app.abcdadmin.constants.IConstants.SUPPORT;
 import static com.app.abcdadmin.constants.IConstants.TICKET_ID;
-import static com.app.abcdadmin.constants.IConstants.TIMESTAMP;
 import static com.app.abcdadmin.constants.IConstants.TITLE;
 import static com.app.abcdadmin.constants.IConstants.TRUE;
 import static com.app.abcdadmin.constants.IConstants.TWO;
@@ -115,7 +108,6 @@ import static com.app.abcdadmin.constants.IConstants.TYPE_CONTACT;
 import static com.app.abcdadmin.constants.IConstants.TYPE_IMAGE;
 import static com.app.abcdadmin.constants.IConstants.TYPE_RECORDING;
 import static com.app.abcdadmin.constants.IConstants.TYPE_TEXT;
-import static com.app.abcdadmin.constants.IConstants.USER_ID;
 import static com.app.abcdadmin.constants.IConstants.VIBRATE_HUNDRED;
 import static com.app.abcdadmin.constants.IConstants.ZERO;
 
@@ -160,10 +152,6 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.app.abcdadmin.async.BaseTask;
 import com.app.abcdadmin.async.TaskRunner;
 import com.app.abcdadmin.fcm.RetroClient;
-import com.app.abcdadmin.fcmmodels.Data;
-import com.app.abcdadmin.fcmmodels.MyResponse;
-import com.app.abcdadmin.fcmmodels.Sender;
-import com.app.abcdadmin.fcmmodels.Token;
 import com.app.abcdadmin.managers.DownloadUtil;
 import com.app.abcdadmin.managers.FirebaseUploader;
 import com.app.abcdadmin.managers.Utils;
@@ -187,7 +175,6 @@ import com.wafflecopter.multicontactpicker.LimitColumn;
 import com.wafflecopter.multicontactpicker.MultiContactPicker;
 
 import org.jetbrains.annotations.NotNull;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -201,10 +188,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class MessageActivity extends BaseActivity implements View.OnClickListener, PickerManagerCallbacks {
 
@@ -1547,6 +1530,16 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
             String message = data.getStringExtra("message");
             newMessage.setText(message);
             clickToSend();
+        }
+        if (resultCode==102 && requestCode==1){
+            ArrayList<String> messages=new ArrayList<>();
+            messages = (ArrayList<String>) data.getSerializableExtra("message");
+            System.out.println(messages);
+            for (int i=1; i<messages.size();i++){
+                newMessage.setText(messages.get(i));
+                clickToSend();
+            }
+
         }
     }
 

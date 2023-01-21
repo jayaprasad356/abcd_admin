@@ -34,5 +34,6 @@
 
     <color name="colorAccent">#2196F3</color>
     <color name="colorBlack">#000000</color>
+    <color name="selected_Msg">#5B8FB8</color>
 
 </resources>

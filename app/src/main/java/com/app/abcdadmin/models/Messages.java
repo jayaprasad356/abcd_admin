@@ -2,7 +2,7 @@ package com.app.abcdadmin.models;
 
 public class Messages {
     public Messages(String message) {
-        this.message=message;
+        this.message = message;
     }
 
     public String getMessage() {
@@ -14,4 +14,14 @@ public class Messages {
     }
 
     String message;
+
+    public boolean isMessageSelected() {
+        return messageSelected;
+    }
+
+    public void setMessageSelected(boolean messageSelected) {
+        this.messageSelected = messageSelected;
+    }
+
+    boolean messageSelected = false;
 }

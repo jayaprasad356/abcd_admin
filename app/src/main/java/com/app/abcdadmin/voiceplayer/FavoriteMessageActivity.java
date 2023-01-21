@@ -1,13 +1,13 @@
 package com.app.abcdadmin.voiceplayer;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Toast;
+import android.widget.Button;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.app.abcdadmin.OnSelectedListener;
 import com.app.abcdadmin.R;
@@ -15,33 +15,47 @@ import com.app.abcdadmin.adapters.FavAdapter;
 import com.app.abcdadmin.models.Messages;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class FavoriteMessageActivity extends AppCompatActivity {
-    private RecyclerView recyclerView;
     Activity activity;
-    Messages messages;
     OnSelectedListener onSelectedListener;
+    Button sendButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favorite_message);
         activity=FavoriteMessageActivity.this;
-        onSelectedListener= message -> {
-            Intent intent = new Intent();
-            intent.putExtra("message", message);
-            setResult(101, intent);
-            finish();
+        onSelectedListener=new OnSelectedListener() {
+            @Override
+            public void onSingleMessageSelected(String Message) {
+                Intent intent = new Intent();
+                intent.putExtra("message", Message);
+                setResult(101, intent);
+                finish();
+            }
+
+            @Override
+            public void onMultiMessageSelected(ArrayList message) {
+                Intent intent = new Intent();
+                intent.putExtra("message", message);
+                setResult(102, intent);
+                finish();
+            }
         };
-        List<String> data = Arrays.asList("TestMessage", "LinearLayoutManager", "LinearLayoutManager(LinearLayoutManager(");
-        recyclerView=findViewById(R.id.recyclerView);
+        RecyclerView recyclerView = findViewById(R.id.recyclerView);
+        sendButton=findViewById(R.id.sendButton);
+
+        ArrayList<Messages> modelMessages = new ArrayList<>();
+        modelMessages.add(new Messages("Hello World!"));
+        modelMessages.add(new Messages("How are you?"));
+        modelMessages.add(new Messages("I am" ));
+
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(activity);
         recyclerView.setLayoutManager(linearLayoutManager);
 
-        FavAdapter adapter = new FavAdapter(data,onSelectedListener,activity);
+        FavAdapter adapter = new FavAdapter(modelMessages,onSelectedListener,activity,sendButton);
         recyclerView.setAdapter(adapter);
     }
 
