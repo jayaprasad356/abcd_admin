@@ -106,6 +106,15 @@ public class PendingTicketActivity extends AppCompatActivity {
 
         session = new Session(activity);
 
+
+        lyt.setVisibility(View.GONE);
+        spinCategory.setSelection(2);
+        spinCategory.setVisibility(View.GONE);
+        chipOpened.setVisibility(View.GONE);
+        chipClosed.setVisibility(View.GONE);
+        chipPending.setVisibility(View.GONE);
+
+        //used to display all the issues in short format like overview
         FirebaseDatabase.getInstance().getReference(PENDING_TICKET).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -121,8 +130,6 @@ public class PendingTicketActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
-
             }
         });
         FirebaseDatabase.getInstance().getReference(OPENED_TICKET).orderByChild(ROLE).equalTo(session.getData(ROLE)).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -170,6 +177,7 @@ public class PendingTicketActivity extends AppCompatActivity {
 
         readTickets();
 
+        //for chips
         chipPending.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -390,6 +398,7 @@ public class PendingTicketActivity extends AppCompatActivity {
 
             }
         });
+
         tvPendingCount1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
