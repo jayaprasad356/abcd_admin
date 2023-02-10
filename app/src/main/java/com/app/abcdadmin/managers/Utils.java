@@ -15,6 +15,7 @@ import static com.app.abcdadmin.constants.IConstants.EXT_VCF;
 import static com.app.abcdadmin.constants.IConstants.FALSE;
 import static com.app.abcdadmin.constants.IConstants.IMG_DEFAULTS;
 import static com.app.abcdadmin.constants.IConstants.IMG_FOLDER;
+import static com.app.abcdadmin.constants.IConstants.JOINING_TICKET;
 import static com.app.abcdadmin.constants.IConstants.MOBILE;
 import static com.app.abcdadmin.constants.IConstants.OPENED_TICKET;
 import static com.app.abcdadmin.constants.IConstants.PENDING_TICKET;
@@ -704,6 +705,9 @@ public class Utils {
     }
     public static Query getQueryClosedTicket() {
         return FirebaseDatabase.getInstance().getReference(CLOSED_TICKET).orderByChild(TIMESTAMP);
+    }
+    public static Query getQueryNewJoining() {
+        return FirebaseDatabase.getInstance().getReference(JOINING_TICKET).orderByChild(TIMESTAMP);
     }
     public static String checKPendingCount(String TicketId) {
         long count = 0;
