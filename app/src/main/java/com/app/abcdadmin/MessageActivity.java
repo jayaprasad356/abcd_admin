@@ -52,6 +52,9 @@ import static com.app.abcdadmin.constants.IConstants.DELAY_ONE_SEC;
 import static com.app.abcdadmin.constants.IConstants.DESCRIPTION;
 import static com.app.abcdadmin.constants.IConstants.DOWNLOAD_DATA;
 import static com.app.abcdadmin.constants.IConstants.EMPTY;
+import static com.app.abcdadmin.constants.IConstants.EMP_ID;
+import static com.app.abcdadmin.constants.IConstants.EMP_MOBILE;
+import static com.app.abcdadmin.constants.IConstants.EMP_NAME;
 import static com.app.abcdadmin.constants.IConstants.EXTRA_ATTACH_DATA;
 import static com.app.abcdadmin.constants.IConstants.EXTRA_ATTACH_DURATION;
 import static com.app.abcdadmin.constants.IConstants.EXTRA_ATTACH_FILE;
@@ -74,6 +77,9 @@ import static com.app.abcdadmin.constants.IConstants.EXT_MP3;
 import static com.app.abcdadmin.constants.IConstants.EXT_VCF;
 import static com.app.abcdadmin.constants.IConstants.FALSE;
 import static com.app.abcdadmin.constants.IConstants.FCM_URL;
+import static com.app.abcdadmin.constants.IConstants.ID;
+import static com.app.abcdadmin.constants.IConstants.JOINING_TICKET;
+import static com.app.abcdadmin.constants.IConstants.LOGIN_TYPE;
 import static com.app.abcdadmin.constants.IConstants.MOBILE;
 import static com.app.abcdadmin.constants.IConstants.NAME;
 import static com.app.abcdadmin.constants.IConstants.NOTIFY_URL;
@@ -108,6 +114,7 @@ import static com.app.abcdadmin.constants.IConstants.TYPE_CONTACT;
 import static com.app.abcdadmin.constants.IConstants.TYPE_IMAGE;
 import static com.app.abcdadmin.constants.IConstants.TYPE_RECORDING;
 import static com.app.abcdadmin.constants.IConstants.TYPE_TEXT;
+import static com.app.abcdadmin.constants.IConstants.USER_ID;
 import static com.app.abcdadmin.constants.IConstants.VIBRATE_HUNDRED;
 import static com.app.abcdadmin.constants.IConstants.ZERO;
 
@@ -193,7 +200,7 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
 
     private LinearLayoutManager layoutManager;
     private RecyclerView mRecyclerView;
-    private String currentId, userId,ticketId, userName = "Sender";
+    private String currentId, userId, ticketId, userName = "Sender";
     private String strSender, strReceiver;
     private ArrayList<Chat> chats;
     private MessageAdapters messageAdapters;
@@ -237,12 +244,12 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
 
     private RelativeLayout rlChatView;
 
-    private String vCardData, displayName, phoneNumber,Name;
+    private String vCardData, displayName, phoneNumber, Name;
     private File fileUri = null;
     private Uri imgUri;
     private TextView txtUsername;
-    private ImageView imgSuperAdmin,imgCloseTicket;
-    private String type,Mobile,TicketType;
+    private ImageView imgSuperAdmin, imgCloseTicket;
+    private String type, Mobile, TicketType;
     private RelativeLayout bottomChatLayout;
     ImageView imgMobile;
 
@@ -257,7 +264,6 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
         apiService = RetroClient.getClient(FCM_URL).create(APIService.class);
 
         initUI();
-
 
 
         currentId = "admin_1";
@@ -310,10 +316,10 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
                 Toast.makeText(mActivity, "Mobile number Copied", Toast.LENGTH_SHORT).show();
             }
         });
-        if (type.equals(PENDING_TICKET)){
+        if (type.equals(PENDING_TICKET)) {
             imgSuperAdmin.setVisibility(View.GONE);
         }
-        if (type.equals(CLOSED_TICKET)){
+        if (type.equals(CLOSED_TICKET)) {
             imgCloseTicket.setVisibility(View.GONE);
             bottomChatLayout.setVisibility(View.GONE);
         }
@@ -426,7 +432,6 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
         imgCloseTicket = findViewById(R.id.imgCloseTicket);
 
 
-
         imgAddAttachment.setOnClickListener(this);
         imgCamera.setOnClickListener(this);
         imgAttachmentEmoji.setOnClickListener(this);
@@ -440,8 +445,6 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
         recordView = findViewById(R.id.recordView);
         recordButton = findViewById(R.id.recordButton);
         recordButton.setRecordView(recordView);//IMPORTANT
-
-
 
 
         initListener();
@@ -535,20 +538,19 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
         imgSuperAdmin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (session.getData(ROLE).equals("Super Admin")){
+                if (session.getData(ROLE).equals("Super Admin")) {
                     sendToAdmin();
-                }else {
+                } else {
                     sendToSuperAdmin();
-                    
+
                 }
-                
+
             }
         });
 
     }
 
-    private void sendToAdmin()
-    {
+    private void sendToAdmin() {
         new AlertDialog.Builder(mActivity)
                 .setTitle("Assign to Admin")
                 .setMessage("Are you sure you want to assign this ticket?")
@@ -584,8 +586,8 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         DatabaseReference ref1 = FirebaseDatabase.getInstance().getReference().child(OPENED_TICKET).child(ticketId);
-                        DatabaseReference ref2= FirebaseDatabase.getInstance().getReference().child(CLOSED_TICKET).child(ticketId);
-                        moveToOpenTicket(ref1,ref2, "closed");
+                        DatabaseReference ref2 = FirebaseDatabase.getInstance().getReference().child(CLOSED_TICKET).child(ticketId);
+                        moveToOpenTicket(ref1, ref2, "closed");
 
                     }
                 })
@@ -595,6 +597,7 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .show();
     }
+
     private void sendToSuperAdmin() {
         new AlertDialog.Builder(mActivity)
                 .setTitle("Assign to Manager")
@@ -692,8 +695,8 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
             openVideoPicker();
         } else if (id == R.id.btnAttachmentFavorite) {
             hideAttachmentView();
-            Intent intent=new Intent(MessageActivity.this, FavoriteMessageActivity.class);
-            startActivityForResult(intent,1);
+            Intent intent = new Intent(MessageActivity.this, FavoriteMessageActivity.class);
+            startActivityForResult(intent, 1);
             // openDocumentPicker();
         } else if (id == R.id.btnAttachmentContact) {
             hideAttachmentView();
@@ -868,35 +871,45 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
         if (blockUnblockCheckBeforeSend()) {
             return;
         }
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
 
-        Query query = Utils.checKPendingTicketUser(ticketId);
-        query.keepSynced(true);
-        query.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.hasChildren()) {
 
-                    DatabaseReference ref1 = FirebaseDatabase.getInstance().getReference().child(PENDING_TICKET).child(ticketId);
-                    DatabaseReference ref2= FirebaseDatabase.getInstance().getReference().child(OPENED_TICKET).child(ticketId);
-                    moveToOpenTicket(ref1,ref2,"pending");
+        HashMap<String, Object> hm2 = new HashMap<>();
+
+        hm2.put(EMP_NAME, session.getData(NAME));
+        hm2.put(EMP_MOBILE, session.getData(MOBILE));
+        hm2.put(EMP_ID, session.getData(USER_ID));
+
+        reference.child(JOINING_TICKET).child(session.getData(EMP_MOBILE)).updateChildren(hm2);
+
+        if (!(session.getData(LOGIN_TYPE).equals("employee"))) {
+            Query query = Utils.checKPendingTicketUser(ticketId);
+            query.keepSynced(true);
+            query.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.hasChildren()) {
+
+                        DatabaseReference ref1 = FirebaseDatabase.getInstance().getReference().child(PENDING_TICKET).child(ticketId);
+                        DatabaseReference ref2 = FirebaseDatabase.getInstance().getReference().child(OPENED_TICKET).child(ticketId);
+                        moveToOpenTicket(ref1, ref2, "pending");
+
+                    }
+
 
                 }
 
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
 
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
+                }
+            });
+        }
         notify = true;
         String defaultMsg;
         final String sender = currentId;
         final String receiver = userId;
 
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
         HashMap<String, Object> hashMap = new HashMap<>();
 
         hashMap.put(EXTRA_SENDER, sender);
@@ -944,7 +957,7 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
         hashMap.put(EXTRA_DATETIME, Utils.getDateTime());
 
         final String key = Utils.getChatUniqueId();
-        hashMap.put(IConstants.ID, key);
+        hashMap.put(ID, key);
         reference.child(REF_CHATS).child(strSender).child(key).setValue(hashMap);
         reference.child(REF_CHATS).child(strReceiver).child(key).setValue(hashMap);
 
@@ -977,12 +990,11 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
         }
     }
 
-    private void sendNotification(String msg)
-    {
+    private void sendNotification(String msg) {
         Map<String, String> params = new HashMap<>();
-        params.put(TITLE,"CHAT SUPPORT");
-        params.put(DESCRIPTION,msg);
-        params.put(MOBILE,Mobile);
+        params.put(TITLE, "CHAT SUPPORT");
+        params.put(DESCRIPTION, msg);
+        params.put(MOBILE, Mobile);
         ApiConfig.RequestToVolley((result, response) -> {
             if (result) {
                 try {
@@ -992,37 +1004,29 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
 
                     }
 
-                } catch (JSONException e){
+                } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
 
 
             }
 
             //pass url
-        }, MessageActivity.this, NOTIFY_URL, params,true);
-
+        }, MessageActivity.this, NOTIFY_URL, params, true);
 
 
     }
 
-    public void moveToOpenTicket(DatabaseReference fromPath, final DatabaseReference toPath, String type)
-    {
-        fromPath.addListenerForSingleValueEvent(new ValueEventListener()
-        {
+    public void moveToOpenTicket(DatabaseReference fromPath, final DatabaseReference toPath, String type) {
+        fromPath.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot)
-            {
-                toPath.setValue(dataSnapshot.getValue(), new DatabaseReference.CompletionListener()
-                {
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                toPath.setValue(dataSnapshot.getValue(), new DatabaseReference.CompletionListener() {
                     @Override
                     public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
-                        if (error != null)
-                        {
+                        if (error != null) {
                             System.out.println("Copy failed");
-                        }
-                        else {
+                        } else {
                             if (type.equals("pending")) {
                                 HashMap<String, Object> hashMap = new HashMap<>();
                                 hashMap.put(TYPE, OPENED_TICKET);
@@ -1031,8 +1035,7 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
                                 ref1.removeValue();
 
 
-                            }
-                            else {
+                            } else {
                                 HashMap<String, Object> hashMap = new HashMap<>();
                                 hashMap.put(TYPE, CLOSED_TICKET);
                                 toPath.updateChildren(hashMap);
@@ -1059,7 +1062,6 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
     }
 
 
-
     private void readMessages() {
         chats = new ArrayList<>();
 
@@ -1084,7 +1086,7 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
                     }
                 }
                 try {
-                    messageAdapters = new MessageAdapters(mActivity, chats, userName, strCurrentImage, "",currentId);
+                    messageAdapters = new MessageAdapters(mActivity, chats, userName, strCurrentImage, "", currentId);
                     mRecyclerView.setAdapter(messageAdapters);
                 } catch (Exception e) {
                     Utils.getErrors(e);
@@ -1200,6 +1202,7 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
         } catch (Exception ignored) {
         }
     }
+
     public static String getExtension(Context context, final Uri uri) {
         final ContentResolver contentResolver = context.getContentResolver();
         final MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
@@ -1526,16 +1529,16 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
                     openPlacePicker();
             }
         }
-        if (resultCode==101 && requestCode==1){
+        if (resultCode == 101 && requestCode == 1) {
             String message = data.getStringExtra("message");
             newMessage.setText(message);
             clickToSend();
         }
-        if (resultCode==102 && requestCode==1){
-            ArrayList<String> messages=new ArrayList<>();
+        if (resultCode == 102 && requestCode == 1) {
+            ArrayList<String> messages = new ArrayList<>();
             messages = (ArrayList<String>) data.getSerializableExtra("message");
             System.out.println(messages);
-            for (int i=1; i<messages.size();i++){
+            for (int i = 1; i < messages.size(); i++) {
                 newMessage.setText(messages.get(i));
                 clickToSend();
             }

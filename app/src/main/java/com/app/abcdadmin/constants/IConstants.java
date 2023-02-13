@@ -52,7 +52,8 @@ public interface IConstants {
 
 
     //String MainBaseUrl = "http://192.168.43.38/abcd/";
-    String MainBaseUrl = "https://appadmin.abcdapp.in/";
+    //String MainBaseUrl = "https://appadmin.abcdapp.in/";
+    String MainBaseUrl = "https://demoabcd.graymatterworks.com/";
     String BaseUrl = MainBaseUrl + "api/";
     String EXTRA_SENDER = "sender";
     String EXTRA_RECEIVER = "receiver";
@@ -119,8 +120,13 @@ public interface IConstants {
     String USER_ID = "user_id";
     String MOBILE = "mobile";
     String SUCCESS = "success";
+    String EMAIL = "email";
+    String PASSWORD = "password";
+
+
     String NOTIFY_URL = BaseUrl + "sendnotify.php";
     String ADMIN_FCM_URL = BaseUrl + "admin_fcm.php";
+    String EMPLOYEE_LOGIN = BaseUrl + "employee_login.php";
     String FCM_BODY = "body";
     String DATA = "data";
     String FCM_GROUPS = "groups";
@@ -156,6 +162,11 @@ public interface IConstants {
     String TYPE = "type";
     String SUPPORT = "support";
     String ROLE = "role";
+    String LOGIN_TYPE = "login_type";
+    String EMP_NAME = "emp_name";
+    String EMP_ID = "emp_id";
+    String EMP_MOBILE = "emp_mobile";
+
     String TYPE_VIDEO = "VIDEO";
     String TYPE_CONTACT = "CONTACT";
     String TYPE_DOCUMENT = "DOCUMENT";

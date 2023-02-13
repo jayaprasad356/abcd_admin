@@ -52,6 +52,7 @@ public class PendingTicketActivity extends AppCompatActivity {
     Activity activity;
     String type = "";
     Session session;
+    Chip pending, followUp, closed;
 
 
     @Override
@@ -62,6 +63,28 @@ public class PendingTicketActivity extends AppCompatActivity {
         mRecyclerView = findViewById(R.id.recyclerView);
 
         mRecyclerView.setHasFixedSize(true);
+        pending=findViewById(R.id.chipPending);
+        followUp=findViewById(R.id.chipFollowup);
+        closed=findViewById(R.id.chipClosed);
+
+        pending.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+               mRecyclerView.setVisibility(View.VISIBLE);
+            }
+        });
+        followUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mRecyclerView.setVisibility(View.GONE);
+            }
+        });
+        closed.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mRecyclerView.setVisibility(View.GONE);
+            }
+        });
         LinearLayoutManager layoutManager = new LinearLayoutManager(activity);
         layoutManager.setReverseLayout(true);
         layoutManager.setStackFromEnd(true);

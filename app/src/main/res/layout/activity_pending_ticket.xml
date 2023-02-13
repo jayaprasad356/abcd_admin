@@ -6,12 +6,59 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".PendingTicketActivity">
+    <HorizontalScrollView
+        android:id="@+id/hori"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/spinCategory"
+        android:layout_centerHorizontal="true"
+        android:paddingStart="@dimen/_5sdp"
+        tools:ignore="RtlSymmetry">
 
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/chipGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:singleSelection="true">
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipPending"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="Pending"
+                android:textColor="@color/white"
+                app:chipBackgroundColor="@color/bg_pending" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipFollowup"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Follow up"
+                android:textColor="@color/white"
+                app:chipBackgroundColor="@color/bg_open" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipClosed"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Closed"
+                android:textColor="@color/white"
+                app:chipBackgroundColor="@color/bg_closed" />
+
+        </com.google.android.material.chip.ChipGroup>
+
+    </HorizontalScrollView>
     <com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/Def"
+        android:visibility="gone"
         android:background="@android:color/transparent"
         app:fastScrollPopupBgColor="@color/colorAccent"
         app:fastScrollPopupTextColor="@android:color/primary_text_dark"
