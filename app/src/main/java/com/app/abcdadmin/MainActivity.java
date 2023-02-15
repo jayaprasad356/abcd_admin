@@ -5,6 +5,7 @@ import static com.app.abcdadmin.constants.IConstants.FALSE;
 import static com.app.abcdadmin.constants.IConstants.ROLE;
 import static com.app.abcdadmin.constants.IConstants.SUPPORT;
 import static com.app.abcdadmin.constants.IConstants.TRUE;
+import static com.app.abcdadmin.constants.IConstants.TYPE;
 import static com.app.abcdadmin.constants.IConstants.ZERO;
 
 import androidx.annotation.NonNull;
@@ -21,6 +22,7 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
+import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -170,11 +172,13 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
     }
 
     private void showpopup(View v) {
-
         PopupMenu popup = new PopupMenu(mActivity, v);
         popup.setOnMenuItemClickListener(this);
         popup.inflate(R.menu.popup_menu);
         popup.show();
+        MenuItem vs=popup.getMenu().findItem(R.id.newJoinings);
+        vs.setVisible(true);
+
     }
 
     @Override
@@ -183,6 +187,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
             session.logoutUser(mActivity);
         } else if (item.getItemId() == R.id.newJoinings) {
             Intent intent = new Intent(mActivity, JoiningActivity.class);
+           session.setData(TYPE,"joining_ticket");
             startActivity(intent);
         }
 
