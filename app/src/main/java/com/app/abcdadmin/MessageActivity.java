@@ -669,14 +669,12 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         if(session.getData(LOGIN_TYPE).equals("employee")) {
-                            reference = FirebaseDatabase.getInstance().getReference(type).child(Mobile);
+                            reference = FirebaseDatabase.getInstance().getReference(JOINING_TICKET).child(Mobile);
                             HashMap<String, Object> hashMap = new HashMap<>();
                             hashMap.put(SUPPORT, "Super Admin");
                             reference.updateChildren(hashMap).addOnCompleteListener(task1 -> {
                                 Toast.makeText(mActivity, "Ticket Assign to Manager", Toast.LENGTH_SHORT).show();
-                                Intent intent = new Intent(mActivity, MainActivity.class);
-                                startActivity(intent);
-                                finish();
+                                onBackPressed();
                             });
                         }else {
                             reference = FirebaseDatabase.getInstance().getReference(type).child(ticketId);
@@ -684,9 +682,7 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
                             hashMap.put(SUPPORT, "Super Admin");
                             reference.updateChildren(hashMap).addOnCompleteListener(task1 -> {
                                 Toast.makeText(mActivity, "Ticket Assign to Manager", Toast.LENGTH_SHORT).show();
-                                Intent intent = new Intent(mActivity, MainActivity.class);
-                                startActivity(intent);
-                                finish();
+                                onBackPressed();
                             });
                         }
                     }
