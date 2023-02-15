@@ -668,16 +668,27 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
                 .setMessage("Are you sure you want to assign this ticket?")
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        reference = FirebaseDatabase.getInstance().getReference(type).child(ticketId);
-                        HashMap<String, Object> hashMap = new HashMap<>();
-                        hashMap.put(SUPPORT, "Super Admin");
-                        reference.updateChildren(hashMap).addOnCompleteListener(task1 -> {
-                            Toast.makeText(mActivity, "Ticket Assign to Manager", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(mActivity, MainActivity.class);
-                            startActivity(intent);
-                            finish();
-                        });
-
+                        if(session.getData(LOGIN_TYPE).equals("employee")) {
+                            reference = FirebaseDatabase.getInstance().getReference(type).child(Mobile);
+                            HashMap<String, Object> hashMap = new HashMap<>();
+                            hashMap.put(SUPPORT, "Super Admin");
+                            reference.updateChildren(hashMap).addOnCompleteListener(task1 -> {
+                                Toast.makeText(mActivity, "Ticket Assign to Manager", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(mActivity, MainActivity.class);
+                                startActivity(intent);
+                                finish();
+                            });
+                        }else {
+                            reference = FirebaseDatabase.getInstance().getReference(type).child(ticketId);
+                            HashMap<String, Object> hashMap = new HashMap<>();
+                            hashMap.put(SUPPORT, "Super Admin");
+                            reference.updateChildren(hashMap).addOnCompleteListener(task1 -> {
+                                Toast.makeText(mActivity, "Ticket Assign to Manager", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(mActivity, MainActivity.class);
+                                startActivity(intent);
+                                finish();
+                            });
+                        }
                     }
                 })
 

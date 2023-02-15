@@ -69,9 +69,9 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
     private TextView mTxtUsername;
     private ViewPager2 mViewPager;
     private long exitTime = 0;
-    Fragment chatFragment,pendingTicketFragment,ticketFragment;
+    Fragment chatFragment, pendingTicketFragment, ticketFragment;
     public static FragmentManager fm = null;
-    ImageView imgMenu,imgSearch;
+    ImageView imgMenu, imgSearch;
     ProgressDialog progressDialog;
 
 
@@ -94,8 +94,6 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
         mTxtUsername.setText(session.getData(ROLE));
 
 
-
-
         chatFragment = new ChatsFragment();
         pendingTicketFragment = new PendingTicketFragment();
         ticketFragment = new TicketFragment();
@@ -113,11 +111,10 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
         imgSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(mActivity,SearchActivity.class);
+                Intent intent = new Intent(mActivity, SearchActivity.class);
                 startActivity(intent);
             }
         });
-
 
 
     }
@@ -174,7 +171,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
 
     private void showpopup(View v) {
 
-        PopupMenu popup = new PopupMenu(mActivity,v);
+        PopupMenu popup = new PopupMenu(mActivity, v);
         popup.setOnMenuItemClickListener(this);
         popup.inflate(R.menu.popup_menu);
         popup.show();
@@ -182,8 +179,11 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
-        if (item.getItemId() == R.id.logoutitem){
+        if (item.getItemId() == R.id.logoutitem) {
             session.logoutUser(mActivity);
+        } else if (item.getItemId() == R.id.newJoinings) {
+            Intent intent = new Intent(mActivity, JoiningActivity.class);
+            startActivity(intent);
         }
 
 

@@ -37,6 +37,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.Constants;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.json.JSONException;
@@ -74,6 +75,9 @@ public class JoiningActivity extends AppCompatActivity implements PopupMenu.OnMe
         imgSearch=findViewById(R.id.imgSearch);
         imgMenu=findViewById(R.id.imgMenu);
         txtUsername.setText(session.getData(IConstants.NAME));
+        if (session.getData(ROLE).equals("Super Admin")){
+           pending.setVisibility(View.GONE);
+        }
 
         imgSearch.setOnClickListener(new View.OnClickListener() {
             @Override
