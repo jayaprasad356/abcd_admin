@@ -1,11 +1,7 @@
 package com.app.abcdadmin;
 
-import static com.app.abcdadmin.constants.IConstants.ADMIN_FCM_URL;
 import static com.app.abcdadmin.constants.IConstants.EMAIL;
 import static com.app.abcdadmin.constants.IConstants.EMPLOYEE_LOGIN;
-import static com.app.abcdadmin.constants.IConstants.EMP_ID;
-import static com.app.abcdadmin.constants.IConstants.EMP_MOBILE;
-import static com.app.abcdadmin.constants.IConstants.EMP_NAME;
 import static com.app.abcdadmin.constants.IConstants.LOGIN_TYPE;
 import static com.app.abcdadmin.constants.IConstants.MOBILE;
 import static com.app.abcdadmin.constants.IConstants.NAME;
@@ -13,7 +9,6 @@ import static com.app.abcdadmin.constants.IConstants.PASSWORD;
 import static com.app.abcdadmin.constants.IConstants.ROLE;
 import static com.app.abcdadmin.constants.IConstants.SUCCESS;
 import static com.app.abcdadmin.constants.IConstants.USER_ID;
-import static com.google.firebase.messaging.Constants.MessageTypes.MESSAGE;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -90,7 +85,7 @@ public class LoginForJoiningsFragment extends Fragment {
                         session.setData(USER_ID,id);
                         session.setData(MOBILE,mobile);
                         session.setData(LOGIN_TYPE, "employee");
-                        Intent intent = new Intent(getActivity(), PendingTicketActivity.class);
+                        Intent intent = new Intent(getActivity(), JoiningActivity.class);
                         startActivity(intent);
 
 

@@ -1,5 +1,6 @@
 package com.app.abcdadmin;
 
+import static com.app.abcdadmin.constants.IConstants.LOGIN_TYPE;
 import static com.app.abcdadmin.constants.IConstants.ROLE;
 
 import android.content.Intent;
@@ -58,8 +59,8 @@ public class LoginForQueriesFragment extends Fragment {
     private void signIn() {
         session.setBoolean("is_logged_in", true);
         session.setData(ROLE, role);
+        session.setData(LOGIN_TYPE, "Admin");
         Intent intent = new Intent(getActivity(), MainActivity.class);
-        intent.putExtra(ROLE, role);
         startActivity(intent);
     }
 }

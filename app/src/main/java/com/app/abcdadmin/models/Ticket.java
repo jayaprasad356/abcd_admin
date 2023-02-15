@@ -22,6 +22,7 @@ public class Ticket implements Serializable {
     private String support;
     private String type;
     private String reply;
+    private String emp_name;
 
     public String getId() {
         return id;
@@ -93,5 +94,13 @@ public class Ticket implements Serializable {
 
     public void setReply(String reply) {
         this.reply = reply;
+    }
+
+    public String getEmp_name() {
+        return emp_name;
+    }
+
+    public void setEmp_name(String emp_name) {
+        this.emp_name = emp_name;
     }
 }

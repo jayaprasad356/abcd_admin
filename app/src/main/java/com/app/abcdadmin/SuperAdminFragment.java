@@ -1,5 +1,6 @@
 package com.app.abcdadmin;
 
+import static com.app.abcdadmin.constants.IConstants.LOGIN_TYPE;
 import static com.app.abcdadmin.constants.IConstants.ROLE;
 
 import android.content.Intent;
@@ -53,6 +54,7 @@ public class SuperAdminFragment extends Fragment {
     private void signIn() {
         session.setBoolean("is_logged_in", true);
         session.setData(ROLE, role);
+        session.setData(LOGIN_TYPE, "Super Admin");
         Intent intent = new Intent(getActivity(), MainActivity.class);
         intent.putExtra(ROLE, role);
         startActivity(intent);

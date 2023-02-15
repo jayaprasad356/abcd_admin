@@ -1,13 +1,13 @@
 package com.app.abcdadmin;
 
 import static com.app.abcdadmin.constants.IConstants.ADMIN_FCM_URL;
-import static com.app.abcdadmin.constants.IConstants.CLOSED_TICKET;
+import static com.app.abcdadmin.constants.IConstants.CLOSED_JOINING;
 import static com.app.abcdadmin.constants.IConstants.FCM_ID;
+import static com.app.abcdadmin.constants.IConstants.FOLLOWUP_TICKET;
 import static com.app.abcdadmin.constants.IConstants.JOINING_TICKET;
-import static com.app.abcdadmin.constants.IConstants.OPENED_TICKET;
-import static com.app.abcdadmin.constants.IConstants.PENDING_TICKET;
 import static com.app.abcdadmin.constants.IConstants.ROLE;
 import static com.app.abcdadmin.constants.IConstants.SUCCESS;
+import static com.app.abcdadmin.constants.IConstants.TYPE;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,12 +16,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.CompoundButton;
-import android.widget.LinearLayout;
-import android.widget.Spinner;
+import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import com.app.abcdadmin.adapters.TicketAdapters;
@@ -33,6 +33,7 @@ import com.app.abcdadmin.models.Ticket;
 import com.google.android.material.chip.Chip;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
@@ -45,7 +46,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class PendingTicketActivity extends AppCompatActivity {
+public class JoiningActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener{
     public RecyclerView mRecyclerView;
     public ArrayList<Ticket> mTickets;
     public TicketAdapters ticketAdapters;
@@ -53,36 +54,59 @@ public class PendingTicketActivity extends AppCompatActivity {
     String type = "";
     Session session;
     Chip pending, followUp, closed;
+    TextView txtUsername;
+    ImageView imgSearch,imgMenu;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_pending_ticket);
+        setContentView(R.layout.activity_joining);
         activity = this;
+        session = new Session(activity);
         mRecyclerView = findViewById(R.id.recyclerView);
 
         mRecyclerView.setHasFixedSize(true);
         pending=findViewById(R.id.chipPending);
         followUp=findViewById(R.id.chipFollowup);
         closed=findViewById(R.id.chipClosed);
+        txtUsername=findViewById(R.id.txtUsername);
+        imgSearch=findViewById(R.id.imgSearch);
+        imgMenu=findViewById(R.id.imgMenu);
+        txtUsername.setText(session.getData(IConstants.NAME));
+
+        imgSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(activity,SearchActivity.class);
+                startActivity(intent);
+
+            }
+        });
+        imgMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showpopup(view);
+            }
+        });
 
         pending.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               mRecyclerView.setVisibility(View.VISIBLE);
+                readTickets(JOINING_TICKET);
+
             }
         });
         followUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mRecyclerView.setVisibility(View.GONE);
+                readTickets(FOLLOWUP_TICKET);
             }
         });
         closed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mRecyclerView.setVisibility(View.GONE);
+                readTickets(CLOSED_JOINING);
             }
         });
         LinearLayoutManager layoutManager = new LinearLayoutManager(activity);
@@ -92,7 +116,7 @@ public class PendingTicketActivity extends AppCompatActivity {
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mRecyclerView.getContext(), layoutManager.getOrientation());
         mRecyclerView.addItemDecoration(dividerItemDecoration);
 
-        session = new Session(activity);
+
 
         FirebaseDatabase.getInstance().getReference(JOINING_TICKET).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -108,7 +132,7 @@ public class PendingTicketActivity extends AppCompatActivity {
             }
         });
 
-        readTickets();
+        readTickets(JOINING_TICKET);
 
 
         FirebaseMessaging.getInstance().getToken().addOnSuccessListener(token -> {
@@ -119,15 +143,49 @@ public class PendingTicketActivity extends AppCompatActivity {
             }
         });
     }
+    private void showpopup(View v) {
+
+        PopupMenu popup = new PopupMenu(activity,v);
+        popup.setOnMenuItemClickListener(this);
+        popup.inflate(R.menu.popup_menu);
+        popup.show();
+    }
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        if (item.getItemId() == R.id.logoutitem){
+            session.logoutUser(activity);
+        }
 
 
-    private void readTickets() {
+        return false;
+    }
+
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+        super.onPointerCaptureChanged(hasCapture);
+    }
+
+
+    private void readTickets(String type) {
 
 
         mTickets = new ArrayList<>();
         Query reference;
 
-        reference = Utils.getQueryNewJoining();
+        if (type.equals(JOINING_TICKET)){
+            reference = Utils.getJoiningTicket();
+
+
+        }
+        else if (type.equals(FOLLOWUP_TICKET)){
+            reference = Utils.getFollowUpTicket();
+
+
+        }
+        else {
+            reference = Utils.geCloseJoining();
+
+        }
 
         reference.keepSynced(true);
         reference.addValueEventListener(new ValueEventListener() {

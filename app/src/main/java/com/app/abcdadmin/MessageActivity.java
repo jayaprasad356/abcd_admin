@@ -47,6 +47,7 @@ import java.util.ArrayList;
 
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 import static com.app.abcdadmin.constants.IConstants.BROADCAST_DOWNLOAD_EVENT;
+import static com.app.abcdadmin.constants.IConstants.CLOSED_JOINING;
 import static com.app.abcdadmin.constants.IConstants.CLOSED_TICKET;
 import static com.app.abcdadmin.constants.IConstants.DELAY_ONE_SEC;
 import static com.app.abcdadmin.constants.IConstants.DESCRIPTION;
@@ -77,6 +78,7 @@ import static com.app.abcdadmin.constants.IConstants.EXT_MP3;
 import static com.app.abcdadmin.constants.IConstants.EXT_VCF;
 import static com.app.abcdadmin.constants.IConstants.FALSE;
 import static com.app.abcdadmin.constants.IConstants.FCM_URL;
+import static com.app.abcdadmin.constants.IConstants.FOLLOWUP_TICKET;
 import static com.app.abcdadmin.constants.IConstants.ID;
 import static com.app.abcdadmin.constants.IConstants.JOINING_TICKET;
 import static com.app.abcdadmin.constants.IConstants.LOGIN_TYPE;
@@ -252,6 +254,8 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
     private String type, Mobile, TicketType;
     private RelativeLayout bottomChatLayout;
     ImageView imgMobile;
+    TextView tvInfo;
+    String emp_name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -267,6 +271,7 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
 
 
         currentId = "admin_1";
+
         reference = FirebaseDatabase.getInstance().getReference(REF_USERS).child(currentId);
         reference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -292,7 +297,16 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
         TicketType = intent.getStringExtra(TYPE);
         Mobile = intent.getStringExtra(MOBILE);
         Name = intent.getStringExtra(NAME);
+        emp_name = intent.getStringExtra(EMP_NAME);
         txtUsername.setText(Name);
+
+        if(emp_name != null){
+            tvInfo.setText(emp_name);
+
+            tvInfo.setVisibility(View.VISIBLE);
+
+        }
+
 
         strSender = currentId + SLASH + userId;
         strReceiver = userId + SLASH + currentId;
@@ -316,10 +330,10 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
                 Toast.makeText(mActivity, "Mobile number Copied", Toast.LENGTH_SHORT).show();
             }
         });
-        if (type.equals(PENDING_TICKET)) {
+        if (type.equals(PENDING_TICKET)|| type.equals(JOINING_TICKET)) {
             imgSuperAdmin.setVisibility(View.GONE);
         }
-        if (type.equals(CLOSED_TICKET)) {
+        if (type.equals(CLOSED_TICKET) || type.equals(CLOSED_JOINING)) {
             imgCloseTicket.setVisibility(View.GONE);
             bottomChatLayout.setVisibility(View.GONE);
         }
@@ -410,6 +424,7 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
     private void initUI() {
 
         mRecyclerView = findViewById(R.id.recyclerView);
+        tvInfo = findViewById(R.id.tvInfo);
 
         //New Component
         rootView = findViewById(R.id.rootView);
@@ -542,7 +557,6 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
                     sendToAdmin();
                 } else {
                     sendToSuperAdmin();
-
                 }
 
             }
@@ -585,9 +599,24 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
                 // The dialog is automatically dismissed when a dialog button is clicked.
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        DatabaseReference ref1 = FirebaseDatabase.getInstance().getReference().child(OPENED_TICKET).child(ticketId);
-                        DatabaseReference ref2 = FirebaseDatabase.getInstance().getReference().child(CLOSED_TICKET).child(ticketId);
-                        moveToOpenTicket(ref1, ref2, "closed");
+                        if ((session.getData(LOGIN_TYPE).equals("employee"))) {
+//                            Toast.makeText(mActivity, "Close", Toast.LENGTH_SHORT).show();
+                             DatabaseReference ref1 = FirebaseDatabase.getInstance().getReference().child(JOINING_TICKET).child(Mobile);
+//                            DatabaseReference ref2 = FirebaseDatabase.getInstance().getReference().child(CLOSED_JOINING).child(Mobile);
+//                            moveToCloseJoining(ref1, ref2);
+                            HashMap<String, Object> hashMap = new HashMap<>();
+                            hashMap.put(TYPE, CLOSED_JOINING);
+                            ref1.updateChildren(hashMap);
+                            onBackPressed();
+
+
+                        }
+                        else {
+                            DatabaseReference ref1 = FirebaseDatabase.getInstance().getReference().child(OPENED_TICKET).child(ticketId);
+                            DatabaseReference ref2 = FirebaseDatabase.getInstance().getReference().child(CLOSED_TICKET).child(ticketId);
+                            moveToOpenTicket(ref1, ref2, "closed");
+                        }
+
 
                     }
                 })
@@ -596,6 +625,41 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
                 .setNegativeButton(android.R.string.no, null)
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .show();
+    }
+
+    private void moveToCloseJoining(DatabaseReference fromPath, DatabaseReference toPath)
+    {
+        fromPath.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                toPath.setValue(dataSnapshot.getValue(), new DatabaseReference.CompletionListener() {
+                    @Override
+                    public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
+                        if (error != null) {
+                            System.out.println("Copy failed");
+                        } else {
+                            HashMap<String, Object> hashMap = new HashMap<>();
+                            hashMap.put(TYPE, CLOSED_JOINING);
+                            toPath.updateChildren(hashMap);
+                            DatabaseReference ref1 = FirebaseDatabase.getInstance().getReference().child(FOLLOWUP_TICKET).child(Mobile);
+                            ref1.removeValue();
+                            onBackPressed();
+
+                        }
+
+
+                    }
+
+
+                });
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+
+        });
     }
 
     private void sendToSuperAdmin() {
@@ -874,15 +938,36 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
 
 
-        HashMap<String, Object> hm2 = new HashMap<>();
+        if ((session.getData(LOGIN_TYPE).equals("employee"))) {
+            reference.child(JOINING_TICKET).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.child(Mobile).exists()) {
+                        HashMap<String, Object> hashMap = new HashMap<>();
+                        hashMap.put(EMP_NAME, session.getData(NAME));
+                        hashMap.put(EMP_MOBILE, session.getData(MOBILE));
+                        hashMap.put(EMP_ID, session.getData(USER_ID));
+                        hashMap.put(TYPE, FOLLOWUP_TICKET);
+                        reference.child(JOINING_TICKET).child(Mobile).updateChildren(hashMap);
+//
+//                        DatabaseReference ref1 = FirebaseDatabase.getInstance().getReference().child(JOINING_TICKET).child(Mobile);
+//                        DatabaseReference ref2 = FirebaseDatabase.getInstance().getReference().child(FOLLOWUP_TICKET).child(Mobile);
+//                        moveToFollowUp(ref1, ref2);
 
-        hm2.put(EMP_NAME, session.getData(NAME));
-        hm2.put(EMP_MOBILE, session.getData(MOBILE));
-        hm2.put(EMP_ID, session.getData(USER_ID));
+                    }
 
-        reference.child(JOINING_TICKET).child(session.getData(EMP_MOBILE)).updateChildren(hm2);
 
-        if (!(session.getData(LOGIN_TYPE).equals("employee"))) {
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+
+
+
+        }else {
             Query query = Utils.checKPendingTicketUser(ticketId);
             query.keepSynced(true);
             query.addValueEventListener(new ValueEventListener() {
@@ -904,6 +989,7 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
 
                 }
             });
+
         }
         notify = true;
         String defaultMsg;
@@ -962,9 +1048,20 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
         reference.child(REF_CHATS).child(strReceiver).child(key).setValue(hashMap);
 
 
-        HashMap<String, Object> hashMap2 = new HashMap<>();
-        hashMap2.put(REPLY, "false");
-        reference.child(TicketType).child(ticketId).updateChildren(hashMap2);
+
+        if(TicketType.equals(JOINING_TICKET) || TicketType.equals(CLOSED_JOINING) || TicketType.equals(FOLLOWUP_TICKET)){
+            HashMap<String, Object> hashMap3 = new HashMap<>();
+            hashMap3.put(REPLY, "false");
+            reference.child(JOINING_TICKET).child(Mobile).updateChildren(hashMap3);
+
+
+        }else {
+            HashMap<String, Object> hashMap2 = new HashMap<>();
+            hashMap2.put(REPLY, "false");
+            reference.child(TicketType).child(ticketId).updateChildren(hashMap2);
+
+
+        }
         Utils.chatSendSound(getApplicationContext());
 
         try {
@@ -988,6 +1085,42 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
             notify = false;
         } catch (Exception ignored) {
         }
+    }
+
+    public void moveToFollowUp(DatabaseReference fromPath, final DatabaseReference toPath) {
+        fromPath.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                toPath.setValue(dataSnapshot.getValue(), new DatabaseReference.CompletionListener() {
+                    @Override
+                    public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
+                        if (error != null) {
+                            System.out.println("Copy failed");
+                        } else {
+                            HashMap<String, Object> hashMap = new HashMap<>();
+                            hashMap.put(EMP_NAME, session.getData(NAME));
+                            hashMap.put(EMP_MOBILE, session.getData(MOBILE));
+                            hashMap.put(EMP_ID, session.getData(USER_ID));
+                            hashMap.put(TYPE, FOLLOWUP_TICKET);
+                            toPath.updateChildren(hashMap);
+                            DatabaseReference ref1 = FirebaseDatabase.getInstance().getReference().child(JOINING_TICKET).child(Mobile);
+                            ref1.removeValue();
+
+                        }
+
+
+                    }
+
+
+                });
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+
+        });
     }
 
     private void sendNotification(String msg) {

@@ -4,6 +4,7 @@ import static android.os.Build.VERSION.SDK_INT;
 
 
 import static com.app.abcdadmin.constants.IConstants.CHAT_SUPPORT;
+import static com.app.abcdadmin.constants.IConstants.CLOSED_JOINING;
 import static com.app.abcdadmin.constants.IConstants.CLOSED_TICKET;
 import static com.app.abcdadmin.constants.IConstants.EXTRA_IS_ONLINE;
 import static com.app.abcdadmin.constants.IConstants.EXTRA_LASTSEEN;
@@ -13,6 +14,7 @@ import static com.app.abcdadmin.constants.IConstants.EXTRA_VERSION_NAME;
 import static com.app.abcdadmin.constants.IConstants.EXT_MP3;
 import static com.app.abcdadmin.constants.IConstants.EXT_VCF;
 import static com.app.abcdadmin.constants.IConstants.FALSE;
+import static com.app.abcdadmin.constants.IConstants.FOLLOWUP_TICKET;
 import static com.app.abcdadmin.constants.IConstants.IMG_DEFAULTS;
 import static com.app.abcdadmin.constants.IConstants.IMG_FOLDER;
 import static com.app.abcdadmin.constants.IConstants.JOINING_TICKET;
@@ -29,6 +31,7 @@ import static com.app.abcdadmin.constants.IConstants.SLASH;
 import static com.app.abcdadmin.constants.IConstants.STATUS_OFFLINE;
 import static com.app.abcdadmin.constants.IConstants.STATUS_ONLINE;
 import static com.app.abcdadmin.constants.IConstants.TIMESTAMP;
+import static com.app.abcdadmin.constants.IConstants.TYPE;
 import static com.app.abcdadmin.constants.IConstants.TYPE_RECORDING;
 
 import android.annotation.SuppressLint;
@@ -693,6 +696,15 @@ public class Utils {
     }
     public static Query getQuerySupportStatus() {
         return FirebaseDatabase.getInstance().getReference(CHAT_SUPPORT);
+    }
+    public static Query getJoiningTicket() {
+        return FirebaseDatabase.getInstance().getReference(JOINING_TICKET).orderByChild(TYPE).equalTo(JOINING_TICKET);
+    }
+    public static Query getFollowUpTicket() {
+        return FirebaseDatabase.getInstance().getReference(JOINING_TICKET).orderByChild(TYPE).equalTo(FOLLOWUP_TICKET);
+    }
+    public static Query geCloseJoining() {
+        return FirebaseDatabase.getInstance().getReference(JOINING_TICKET).orderByChild(TYPE).equalTo(CLOSED_JOINING);
     }
     public static Query getQueryPendingTicket() {
         return FirebaseDatabase.getInstance().getReference(PENDING_TICKET).orderByChild(TIMESTAMP);

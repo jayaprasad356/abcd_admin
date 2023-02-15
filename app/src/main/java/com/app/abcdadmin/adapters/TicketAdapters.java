@@ -1,5 +1,6 @@
 package com.app.abcdadmin.adapters;
 
+import static com.app.abcdadmin.constants.IConstants.EMP_NAME;
 import static com.app.abcdadmin.constants.IConstants.EXTRA_USER_ID;
 import static com.app.abcdadmin.constants.IConstants.MOBILE;
 import static com.app.abcdadmin.constants.IConstants.NAME;
@@ -71,6 +72,7 @@ public class TicketAdapters extends RecyclerView.Adapter<TicketAdapters.ViewHold
                 intent.putExtra(NAME, ticket.getName());
                 intent.putExtra(TYPE, ticket.getType());
                 intent.putExtra(MOBILE, ticket.getMobile());
+                intent.putExtra(EMP_NAME, ticket.getEmp_name());
                 mContext.startActivity(intent);
             }
         });

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 
 import com.app.abcdadmin.LoginActivity;
+import com.app.abcdadmin.TabActivity;
 
 public class Session {
     public static final String PREFER_NAME = "abcd";
@@ -47,7 +48,7 @@ public class Session {
 
 
     public void logoutUser(Activity activity) {
-        Intent i = new Intent(activity, LoginActivity.class);
+        Intent i = new Intent(activity, TabActivity.class);
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         activity.startActivity(i);
