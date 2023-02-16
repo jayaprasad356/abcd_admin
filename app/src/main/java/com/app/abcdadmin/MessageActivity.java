@@ -570,8 +570,8 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
                 .setMessage("Are you sure you want to assign this ticket?")
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        if(session.getData(TYPE).equals(JOINING_TICKET)) {
-                            reference = FirebaseDatabase.getInstance().getReference(JOINING_TICKET).child(ticketId);
+                        if(TicketType.equals(JOINING_TICKET) || TicketType.equals(FOLLOWUP_TICKET)  || TicketType.equals(CLOSED_JOINING)) {
+                            reference = FirebaseDatabase.getInstance().getReference(JOINING_TICKET).child(Mobile);
                             HashMap<String, Object> hashMap = new HashMap<>();
                             hashMap.put(SUPPORT, "Admin");
                             reference.updateChildren(hashMap).addOnCompleteListener(task1 -> {
@@ -611,23 +611,18 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
                 // The dialog is automatically dismissed when a dialog button is clicked.
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        if ((session.getData(LOGIN_TYPE).equals("employee"))) {
-//                            Toast.makeText(mActivity, "Close", Toast.LENGTH_SHORT).show();
-                             DatabaseReference ref1 = FirebaseDatabase.getInstance().getReference().child(JOINING_TICKET).child(Mobile);
-//                            DatabaseReference ref2 = FirebaseDatabase.getInstance().getReference().child(CLOSED_JOINING).child(Mobile);
-//                            moveToCloseJoining(ref1, ref2);
+                        if(TicketType.equals(JOINING_TICKET) || TicketType.equals(FOLLOWUP_TICKET)  || TicketType.equals(CLOSED_JOINING)) {
+                            DatabaseReference ref1 = FirebaseDatabase.getInstance().getReference().child(JOINING_TICKET).child(Mobile);
                             HashMap<String, Object> hashMap = new HashMap<>();
                             hashMap.put(TYPE, CLOSED_JOINING);
                             ref1.updateChildren(hashMap);
                             onBackPressed();
-
-
-                        }
-                        else {
+                        }else {
                             DatabaseReference ref1 = FirebaseDatabase.getInstance().getReference().child(OPENED_TICKET).child(ticketId);
                             DatabaseReference ref2 = FirebaseDatabase.getInstance().getReference().child(CLOSED_TICKET).child(ticketId);
                             moveToOpenTicket(ref1, ref2, "closed");
                         }
+
 
 
                     }

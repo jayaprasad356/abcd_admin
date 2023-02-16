@@ -55,8 +55,9 @@ public class JoiningActivity extends AppCompatActivity implements PopupMenu.OnMe
     String type = "";
     Session session;
     Chip pending, followUp, closed;
-    TextView txtUsername;
+    TextView txtUsername,tvCount;
     ImageView imgSearch,imgMenu;
+    int folowupscount = 0,closedcount = 0;
 
 
     @Override
@@ -66,6 +67,7 @@ public class JoiningActivity extends AppCompatActivity implements PopupMenu.OnMe
         activity = this;
         session = new Session(activity);
         mRecyclerView = findViewById(R.id.recyclerView);
+        tvCount = findViewById(R.id.tvCount);
 
         mRecyclerView.setHasFixedSize(true);
         pending=findViewById(R.id.chipPending);
@@ -77,7 +79,40 @@ public class JoiningActivity extends AppCompatActivity implements PopupMenu.OnMe
         txtUsername.setText(session.getData(IConstants.NAME));
         if (session.getData(ROLE).equals("Super Admin")){
            pending.setVisibility(View.GONE);
+            FirebaseDatabase.getInstance().getReference(JOINING_TICKET).orderByChild(TYPE).equalTo(FOLLOWUP_TICKET).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if (snapshot.exists()) {
+                        folowupscount = (int) snapshot.getChildrenCount();
+                        setTotalCount();
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+            FirebaseDatabase.getInstance().getReference(JOINING_TICKET).orderByChild(TYPE).equalTo(CLOSED_JOINING).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if (snapshot.exists()) {
+                        closedcount = (int) snapshot.getChildrenCount();
+                        setTotalCount();
+
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+
+
         }
+
+
 
         imgSearch.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -147,6 +182,13 @@ public class JoiningActivity extends AppCompatActivity implements PopupMenu.OnMe
             }
         });
     }
+
+    private void setTotalCount() {
+        tvCount.setVisibility(View.VISIBLE);
+
+        tvCount.setText("Total Follow Ups = "+folowupscount + "\nTotal Closed = "+closedcount);
+    }
+
     private void showpopup(View v) {
 
         PopupMenu popup = new PopupMenu(activity,v);

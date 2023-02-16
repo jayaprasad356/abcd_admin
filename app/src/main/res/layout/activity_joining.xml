@@ -79,6 +79,12 @@
 
 
     </com.google.android.material.appbar.AppBarLayout>
+    <TextView
+        android:id="@+id/tvCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:text="Total Follow Ups = 100"/>
     <HorizontalScrollView
         android:id="@+id/hori"
         android:layout_gravity="center"

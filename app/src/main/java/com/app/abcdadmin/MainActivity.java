@@ -2,6 +2,7 @@ package com.app.abcdadmin;
 
 import static com.app.abcdadmin.constants.IConstants.CHAT_SUPPORT;
 import static com.app.abcdadmin.constants.IConstants.FALSE;
+import static com.app.abcdadmin.constants.IConstants.JOINING_TICKET;
 import static com.app.abcdadmin.constants.IConstants.ROLE;
 import static com.app.abcdadmin.constants.IConstants.SUPPORT;
 import static com.app.abcdadmin.constants.IConstants.TRUE;
@@ -187,7 +188,6 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
             session.logoutUser(mActivity);
         } else if (item.getItemId() == R.id.newJoinings) {
             Intent intent = new Intent(mActivity, JoiningActivity.class);
-           session.setData(TYPE,"joining_ticket");
             startActivity(intent);
         }
 
