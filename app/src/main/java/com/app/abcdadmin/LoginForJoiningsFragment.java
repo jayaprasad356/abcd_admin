@@ -87,6 +87,7 @@ public class LoginForJoiningsFragment extends Fragment {
                         session.setData(LOGIN_TYPE, "employee");
                         Intent intent = new Intent(getActivity(), JoiningActivity.class);
                         startActivity(intent);
+                        getActivity().finish();
 
 
                     }else {

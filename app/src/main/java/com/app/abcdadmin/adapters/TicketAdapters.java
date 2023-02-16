@@ -59,6 +59,12 @@ public class TicketAdapters extends RecyclerView.Adapter<TicketAdapters.ViewHold
         viewHolder.tvMobile.setText(ticket.getMobile());
         viewHolder.tvDescription.setText(ticket.getDescription());
         viewHolder.tvCategory.setText(ticket.getCategory());
+        if (type.equals("showEmpName")){
+            viewHolder.empName.setVisibility(View.VISIBLE);
+            viewHolder.empName.setText(ticket.getEmp_name());
+        }else {
+            viewHolder.empName.setVisibility(View.GONE);
+        }
 
         if (ticket.getReply() != null && ticket.getReply().equals("true")){
             viewHolder.imgReplyIndicator.setVisibility(View.VISIBLE);
@@ -92,7 +98,7 @@ public class TicketAdapters extends RecyclerView.Adapter<TicketAdapters.ViewHold
 
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        public final TextView tvName,tvMobile,tvDescription,tvCategory;
+        public final TextView tvName,tvMobile,tvDescription,tvCategory,empName;
         public final ImageView imgReplyIndicator;
 
         public ViewHolder(@NonNull View itemView) {
@@ -103,6 +109,9 @@ public class TicketAdapters extends RecyclerView.Adapter<TicketAdapters.ViewHold
             tvDescription = itemView.findViewById(R.id.tvDescription);
             tvCategory = itemView.findViewById(R.id.tvCategory);
             imgReplyIndicator = itemView.findViewById(R.id.imgReplyIndicator);
+            empName=itemView.findViewById(R.id.tvEmpName);
+
+
         }
     }
 

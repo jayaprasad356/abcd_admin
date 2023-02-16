@@ -104,12 +104,14 @@ public class JoiningActivity extends AppCompatActivity implements PopupMenu.OnMe
         followUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                type="showEmpName";
                 readTickets(FOLLOWUP_TICKET);
             }
         });
         closed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                type="showEmpName";
                 readTickets(CLOSED_JOINING);
             }
         });
