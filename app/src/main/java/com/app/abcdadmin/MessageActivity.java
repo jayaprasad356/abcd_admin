@@ -616,7 +616,16 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
                             HashMap<String, Object> hashMap = new HashMap<>();
                             hashMap.put(TYPE, CLOSED_JOINING);
                             TicketType="closed_joining";
-                            ref1.updateChildren(hashMap);
+                            ref1.updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if(task.isSuccessful()) {
+                                        Toast.makeText(mActivity, "working", Toast.LENGTH_SHORT).show();
+                                    }else{
+                                        Toast.makeText(mActivity, "not working", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
                             onBackPressed();
                         }else {
                             DatabaseReference ref1 = FirebaseDatabase.getInstance().getReference().child(OPENED_TICKET).child(ticketId);
