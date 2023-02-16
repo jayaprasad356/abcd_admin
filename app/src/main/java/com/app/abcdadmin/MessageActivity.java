@@ -615,7 +615,7 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
                             DatabaseReference ref1 = FirebaseDatabase.getInstance().getReference().child(JOINING_TICKET).child(Mobile);
                             HashMap<String, Object> hashMap = new HashMap<>();
                             hashMap.put(TYPE, CLOSED_JOINING);
-                            TicketType="closed_joining";
+                            TicketType=CLOSED_JOINING;
                             ref1.updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
@@ -963,7 +963,7 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
 
 
         if ((session.getData(LOGIN_TYPE).equals("employee"))) {
-            reference.child(JOINING_TICKET).addValueEventListener(new ValueEventListener() {
+            reference.child(JOINING_TICKET).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     if (dataSnapshot.child(Mobile).exists()) {
