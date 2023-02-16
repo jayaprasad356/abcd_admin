@@ -620,9 +620,9 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if(task.isSuccessful()) {
-                                        Toast.makeText(mActivity, "working", Toast.LENGTH_SHORT).show();
+
                                     }else{
-                                        Toast.makeText(mActivity, "not working", Toast.LENGTH_SHORT).show();
+
                                     }
                                 }
                             });
