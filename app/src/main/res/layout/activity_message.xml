@@ -87,13 +87,27 @@
                         android:layout_height="wrap_content"
                         android:src="@drawable/ic_baseline_content_copy_24"/>
                 </LinearLayout>
-                <TextView
-                    android:id="@+id/tvInfo"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="@dimen/_10sdp"
-                    android:visibility="gone"
-                    android:text=""/>
+                    android:orientation="horizontal">
+                    <TextView
+                        android:id="@+id/tvInfo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/_10sdp"
+                        android:visibility="gone"
+                        android:text=""/>
+                    <TextView
+                        android:id="@+id/tvRefferedBy"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/_12sdp"
+                        android:layout_marginStart="@dimen/_30sdp"
+                        android:visibility="gone"
+                        android:text=""/>
+                </LinearLayout>
+
             </LinearLayout>
 
 

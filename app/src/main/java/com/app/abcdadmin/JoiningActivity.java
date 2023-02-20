@@ -5,6 +5,9 @@ import static com.app.abcdadmin.constants.IConstants.CLOSED_JOINING;
 import static com.app.abcdadmin.constants.IConstants.FCM_ID;
 import static com.app.abcdadmin.constants.IConstants.FOLLOWUP_TICKET;
 import static com.app.abcdadmin.constants.IConstants.JOINING_TICKET;
+import static com.app.abcdadmin.constants.IConstants.JOIN_CHAT;
+import static com.app.abcdadmin.constants.IConstants.LOGIN_TYPE;
+import static com.app.abcdadmin.constants.IConstants.MOBILE;
 import static com.app.abcdadmin.constants.IConstants.ROLE;
 import static com.app.abcdadmin.constants.IConstants.SUCCESS;
 import static com.app.abcdadmin.constants.IConstants.TYPE;
@@ -47,7 +50,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class JoiningActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener{
+public class JoiningActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener {
     public RecyclerView mRecyclerView;
     public ArrayList<Ticket> mTickets;
     public TicketAdapters ticketAdapters;
@@ -55,9 +58,9 @@ public class JoiningActivity extends AppCompatActivity implements PopupMenu.OnMe
     String type = "";
     Session session;
     Chip pending, followUp, closed;
-    TextView txtUsername,tvCount;
-    ImageView imgSearch,imgMenu;
-    int folowupscount = 0,closedcount = 0;
+    TextView txtUsername, tvCount;
+    ImageView imgSearch, imgMenu;
+    int folowupscount = 0, closedcount = 0;
 
 
     @Override
@@ -70,15 +73,15 @@ public class JoiningActivity extends AppCompatActivity implements PopupMenu.OnMe
         tvCount = findViewById(R.id.tvCount);
 
         mRecyclerView.setHasFixedSize(true);
-        pending=findViewById(R.id.chipPending);
-        followUp=findViewById(R.id.chipFollowup);
-        closed=findViewById(R.id.chipClosed);
-        txtUsername=findViewById(R.id.txtUsername);
-        imgSearch=findViewById(R.id.imgSearch);
-        imgMenu=findViewById(R.id.imgMenu);
+        pending = findViewById(R.id.chipPending);
+        followUp = findViewById(R.id.chipFollowup);
+        closed = findViewById(R.id.chipClosed);
+        txtUsername = findViewById(R.id.txtUsername);
+        imgSearch = findViewById(R.id.imgSearch);
+        imgMenu = findViewById(R.id.imgMenu);
         txtUsername.setText(session.getData(IConstants.NAME));
-        if (session.getData(ROLE).equals("Super Admin")){
-           pending.setVisibility(View.GONE);
+        if (session.getData(ROLE).equals("Super Admin")) {
+            pending.setVisibility(View.GONE);
             FirebaseDatabase.getInstance().getReference(JOINING_TICKET).orderByChild(TYPE).equalTo(FOLLOWUP_TICKET).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -113,11 +116,10 @@ public class JoiningActivity extends AppCompatActivity implements PopupMenu.OnMe
         }
 
 
-
         imgSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(activity,SearchActivity.class);
+                Intent intent = new Intent(activity, SearchActivity.class);
                 startActivity(intent);
 
             }
@@ -139,14 +141,14 @@ public class JoiningActivity extends AppCompatActivity implements PopupMenu.OnMe
         followUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                type="showEmpName";
+                type = "showEmpName";
                 readTickets(FOLLOWUP_TICKET);
             }
         });
         closed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                type="showEmpName";
+                type = "showEmpName";
                 readTickets(CLOSED_JOINING);
             }
         });
@@ -156,7 +158,6 @@ public class JoiningActivity extends AppCompatActivity implements PopupMenu.OnMe
         mRecyclerView.setLayoutManager(layoutManager);
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mRecyclerView.getContext(), layoutManager.getOrientation());
         mRecyclerView.addItemDecoration(dividerItemDecoration);
-
 
 
         FirebaseDatabase.getInstance().getReference(JOINING_TICKET).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -188,19 +189,20 @@ public class JoiningActivity extends AppCompatActivity implements PopupMenu.OnMe
     private void setTotalCount() {
         tvCount.setVisibility(View.VISIBLE);
 
-        tvCount.setText("Total Follow Ups = "+folowupscount + "\nTotal Closed = "+closedcount);
+        tvCount.setText("Total Follow Ups = " + folowupscount + "\nTotal Closed = " + closedcount);
     }
 
     private void showpopup(View v) {
 
-        PopupMenu popup = new PopupMenu(activity,v);
+        PopupMenu popup = new PopupMenu(activity, v);
         popup.setOnMenuItemClickListener(this);
         popup.inflate(R.menu.popup_menu);
         popup.show();
     }
+
     @Override
     public boolean onMenuItemClick(MenuItem item) {
-        if (item.getItemId() == R.id.logoutitem){
+        if (item.getItemId() == R.id.logoutitem) {
             session.logoutUser(activity);
         }
 
@@ -220,17 +222,15 @@ public class JoiningActivity extends AppCompatActivity implements PopupMenu.OnMe
         mTickets = new ArrayList<>();
         Query reference;
 
-        if (type.equals(JOINING_TICKET)){
+        if (type.equals(JOINING_TICKET)) {
             reference = Utils.getJoiningTicket();
 
 
-        }
-        else if (type.equals(FOLLOWUP_TICKET)){
+        } else if (type.equals(FOLLOWUP_TICKET)) {
             reference = Utils.getFollowUpTicket();
 
 
-        }
-        else {
+        } else {
             reference = Utils.geCloseJoining();
 
         }
@@ -245,9 +245,22 @@ public class JoiningActivity extends AppCompatActivity implements PopupMenu.OnMe
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         Ticket user = snapshot.getValue(Ticket.class);
                         assert user != null;
-
-                        if (user.getSupport() != null && user.getSupport().equals(session.getData(ROLE))) {
-                            mTickets.add(user);
+                        if (session.getData(LOGIN_TYPE).equals("Super Admin")) {
+                            if (user.getSupport() != null && user.getSupport().equals(session.getData(ROLE))) {
+                                mTickets.add(user);
+                            }
+                        } else {
+                            if (type.equals(FOLLOWUP_TICKET) || type.equals(CLOSED_JOINING)) {
+                                if (session.getData(MOBILE).equals(user.getEmp_mobile())) {
+                                    if (user.getSupport() != null && user.getSupport().equals(session.getData(ROLE))) {
+                                        mTickets.add(user);
+                                    }
+                                }
+                            } else {
+                                if (user.getSupport() != null && user.getSupport().equals(session.getData(ROLE))) {
+                                    mTickets.add(user);
+                                }
+                            }
                         }
                     }
 
@@ -289,6 +302,7 @@ public class JoiningActivity extends AppCompatActivity implements PopupMenu.OnMe
     }
 
     private void setAdatper() {
+        session.setBoolean(JOIN_CHAT,true);
         mRecyclerView.setVisibility(View.VISIBLE);
         ticketAdapters = new TicketAdapters(activity, mTickets, type);
         mRecyclerView.setAdapter(ticketAdapters);

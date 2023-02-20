@@ -49,13 +49,15 @@ public interface IConstants {
 
     String EXTRA_USER_ID = "userId";
     String TICKET_ID = "ticket_id";
+    String REFERRED_BY = "referred_by";
+
     String NAME = "name";
     String BROADCAST_PLAY_RECORDING_EVENT = "com.app.abcdadmin.PLAY_RECORDING_EVENT";
 
 
     //String MainBaseUrl = "http://192.168.43.38/abcd/";
-    //String MainBaseUrl = "https://appadmin.abcdapp.in/";
-    String MainBaseUrl = "https://demoabcd.graymatterworks.com/";
+    String MainBaseUrl = "https://appadmin.abcdapp.in/";
+   // String MainBaseUrl = "https://demoabcd.graymatterworks.com/";
     String BaseUrl = MainBaseUrl + "api/";
     String EXTRA_SENDER = "sender";
     String EXTRA_RECEIVER = "receiver";
@@ -134,6 +136,7 @@ public interface IConstants {
     String FCM_GROUPS = "groups";
     String FCM_USERNAME = "username";
     String FCM_TYPE = "type";
+    String JOIN_CHAT="join_chat";
 
     String FCM_URL = "https://fcm.googleapis.com/";
 

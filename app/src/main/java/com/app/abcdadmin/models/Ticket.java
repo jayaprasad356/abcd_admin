@@ -23,7 +23,8 @@ public class Ticket implements Serializable {
     private String type;
     private String reply;
     private String emp_name;
-
+    private String emp_mobile;
+    private String referred_by;
     public String getId() {
         return id;
     }
@@ -102,5 +103,21 @@ public class Ticket implements Serializable {
 
     public void setEmp_name(String emp_name) {
         this.emp_name = emp_name;
+    }
+
+    public String getEmp_mobile() {
+        return emp_mobile;
+    }
+
+    public void setEmp_mobile(String emp_mobile) {
+        this.emp_mobile = emp_mobile;
+    }
+
+    public String getReferred_by() {
+        return referred_by;
+    }
+
+    public void setReferred_by(String referred_by) {
+        this.referred_by = referred_by;
     }
 }

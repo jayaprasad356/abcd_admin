@@ -81,6 +81,7 @@ import static com.app.abcdadmin.constants.IConstants.FCM_URL;
 import static com.app.abcdadmin.constants.IConstants.FOLLOWUP_TICKET;
 import static com.app.abcdadmin.constants.IConstants.ID;
 import static com.app.abcdadmin.constants.IConstants.JOINING_TICKET;
+import static com.app.abcdadmin.constants.IConstants.JOIN_CHAT;
 import static com.app.abcdadmin.constants.IConstants.LOGIN_TYPE;
 import static com.app.abcdadmin.constants.IConstants.MOBILE;
 import static com.app.abcdadmin.constants.IConstants.NAME;
@@ -92,6 +93,7 @@ import static com.app.abcdadmin.constants.IConstants.PERMISSION_AUDIO;
 import static com.app.abcdadmin.constants.IConstants.PERMISSION_CONTACT;
 import static com.app.abcdadmin.constants.IConstants.PERMISSION_DOCUMENT;
 import static com.app.abcdadmin.constants.IConstants.PERMISSION_VIDEO;
+import static com.app.abcdadmin.constants.IConstants.REFERRED_BY;
 import static com.app.abcdadmin.constants.IConstants.REF_CHATS;
 import static com.app.abcdadmin.constants.IConstants.REF_CHAT_ATTACHMENT;
 import static com.app.abcdadmin.constants.IConstants.REF_CHAT_PHOTO_UPLOAD;
@@ -254,8 +256,8 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
     private String type, Mobile, TicketType;
     private RelativeLayout bottomChatLayout;
     ImageView imgMobile;
-    TextView tvInfo;
-    String emp_name;
+    TextView tvInfo,tvRefferedBy;
+    String emp_name,referredBy;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -298,6 +300,8 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
         Mobile = intent.getStringExtra(MOBILE);
         Name = intent.getStringExtra(NAME);
         emp_name = intent.getStringExtra(EMP_NAME);
+        referredBy = intent.getStringExtra(REFERRED_BY);
+
         txtUsername.setText(Name);
 
         if(emp_name != null){
@@ -307,6 +311,11 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
 
         }
 
+
+        if(referredBy != null){
+            tvRefferedBy.setVisibility(View.VISIBLE);
+            tvRefferedBy.setText(referredBy);
+        }
 
         strSender = currentId + SLASH + userId;
         strReceiver = userId + SLASH + currentId;
@@ -425,6 +434,7 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
 
         mRecyclerView = findViewById(R.id.recyclerView);
         tvInfo = findViewById(R.id.tvInfo);
+        tvRefferedBy=findViewById(R.id.tvRefferedBy);
 
         //New Component
         rootView = findViewById(R.id.rootView);
@@ -1152,22 +1162,22 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
         params.put(TITLE, "CHAT SUPPORT");
         params.put(DESCRIPTION, msg);
         params.put(MOBILE, Mobile);
+        if (session.getBoolean(JOIN_CHAT))
+            params.put(TYPE, JOIN_CHAT);
+        else
+            params.put(TYPE, "chat");
         ApiConfig.RequestToVolley((result, response) -> {
             if (result) {
                 try {
                     JSONObject jsonObject = new JSONObject(response);
                     if (jsonObject.getBoolean(SUCCESS)) {
 
-
                     }
 
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
-
             }
-
             //pass url
         }, MessageActivity.this, NOTIFY_URL, params, true);
 
