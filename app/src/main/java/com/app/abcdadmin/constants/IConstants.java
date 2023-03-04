@@ -56,8 +56,8 @@ public interface IConstants {
 
 
     //String MainBaseUrl = "http://192.168.43.38/abcd/";
-    String MainBaseUrl = "https://appadmin.abcdapp.in/";
-   // String MainBaseUrl = "https://demoabcd.graymatterworks.com/";
+   // String MainBaseUrl = "https://appadmin.abcdapp.in/";
+    String MainBaseUrl = "https://demoabcd.graymatterworks.com/";
     String BaseUrl = MainBaseUrl + "api/";
     String EXTRA_SENDER = "sender";
     String EXTRA_RECEIVER = "receiver";
@@ -131,6 +131,7 @@ public interface IConstants {
     String NOTIFY_URL = BaseUrl + "sendnotify.php";
     String ADMIN_FCM_URL = BaseUrl + "admin_fcm.php";
     String EMPLOYEE_LOGIN = BaseUrl + "employee_login.php";
+    String USERDETAILS_BYMOBILE = BaseUrl + "userdetails_bymobile.php";
     String FCM_BODY = "body";
     String DATA = "data";
     String FCM_GROUPS = "groups";

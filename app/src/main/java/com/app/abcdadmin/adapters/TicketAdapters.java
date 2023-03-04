@@ -1,17 +1,15 @@
 package com.app.abcdadmin.adapters;
 
-import static com.app.abcdadmin.constants.IConstants.CLOSED_JOINING;
 import static com.app.abcdadmin.constants.IConstants.EMP_NAME;
 import static com.app.abcdadmin.constants.IConstants.EXTRA_USER_ID;
-import static com.app.abcdadmin.constants.IConstants.FOLLOWUP_TICKET;
-import static com.app.abcdadmin.constants.IConstants.JOINING_TICKET;
 import static com.app.abcdadmin.constants.IConstants.MOBILE;
 import static com.app.abcdadmin.constants.IConstants.NAME;
 import static com.app.abcdadmin.constants.IConstants.ONE;
 import static com.app.abcdadmin.constants.IConstants.REFERRED_BY;
+import static com.app.abcdadmin.constants.IConstants.SUCCESS;
 import static com.app.abcdadmin.constants.IConstants.TICKET_ID;
 import static com.app.abcdadmin.constants.IConstants.TYPE;
-import static com.app.abcdadmin.constants.IConstants.TYPE_AUDIO;
+import static com.app.abcdadmin.constants.IConstants.USERDETAILS_BYMOBILE;
 import static com.app.abcdadmin.constants.IConstants.ZERO;
 
 import android.app.Activity;
@@ -28,25 +26,26 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.app.abcdadmin.MessageActivity;
 import com.app.abcdadmin.R;
+import com.app.abcdadmin.helper.ApiConfig;
 import com.app.abcdadmin.managers.Utils;
 import com.app.abcdadmin.models.Ticket;
 import com.app.abcdadmin.views.SingleClickListener;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
 
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class TicketAdapters extends RecyclerView.Adapter<TicketAdapters.ViewHolder> implements FastScrollRecyclerView.SectionedAdapter {
 
     private final Activity mContext;
     private final ArrayList<Ticket> mTickets;
-    private  final String type;
+    private final String type;
 
 
     public TicketAdapters(Activity mContext, ArrayList<Ticket> ticketsList, String type) {
@@ -97,14 +96,16 @@ public class TicketAdapters extends RecyclerView.Adapter<TicketAdapters.ViewHold
 //
 //            }
 //        });
-        if (type.equals("showEmpName")){
+        if (type.equals("showEmpName")) {
             viewHolder.empName.setVisibility(View.VISIBLE);
             viewHolder.empName.setText(ticket.getEmp_name());
-        }else {
+            viewHolder.tvReffered.setText(ticket.getReferred_by());
+
+        } else {
             viewHolder.empName.setVisibility(View.GONE);
         }
 
-        if (ticket.getReply() != null && ticket.getReply().equals("true")){
+        if (ticket.getReply() != null && ticket.getReply().equals("true")) {
             viewHolder.imgReplyIndicator.setVisibility(View.VISIBLE);
         }
         viewHolder.itemView.setOnClickListener(new SingleClickListener() {
@@ -122,6 +123,50 @@ public class TicketAdapters extends RecyclerView.Adapter<TicketAdapters.ViewHold
             }
         });
 
+        getVerifyStatus(ticket, viewHolder, i);
+    }
+
+    private void getVerifyStatus(Ticket ticket, ViewHolder viewHolder, int i) {
+
+
+        Map<String, String> params = new HashMap<>();
+        params.put(MOBILE, ticket.getMobile());
+        ApiConfig.RequestToVolley((result, response) -> {
+            if (result) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    if (jsonObject.getBoolean(SUCCESS)) {
+                        // Toast.makeText(mContext, "" + String.valueOf(jsonObject.getString("message")), Toast.LENGTH_SHORT).show();
+                        JSONArray dataArray = jsonObject.getJSONArray("data");
+                        JSONObject data = dataArray.getJSONObject(0);
+
+                        String status = data.getString("status");
+                        if (status.equals("1")) {
+                            viewHolder.tvStatusVerifed.setVisibility(View.VISIBLE);
+                            viewHolder.tvReffered.setText("Reffer Code: " + ticket.getReferred_by());
+                            viewHolder.tvStatusVerifed.setText("Verified");
+                        } else if (status.equals("0")) {
+                            viewHolder.tvStatusNotVerifed.setVisibility(View.VISIBLE);
+                            viewHolder.tvReffered.setText("Reffer Code: " + ticket.getReferred_by());
+                            viewHolder.tvStatusNotVerifed.setText("Not Verified");
+
+                        } else if (status.equals("2")) {
+                            viewHolder.tvStatusBlocked.setVisibility(View.VISIBLE);
+                            viewHolder.tvReffered.setText("Reffer Code: " + ticket.getReferred_by());
+                            viewHolder.tvStatusBlocked.setText("Blocked");
+                        }
+
+                    } else {
+
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }, mContext, USERDETAILS_BYMOBILE, params, true);
+
+
     }
 
     @NonNull
@@ -137,7 +182,7 @@ public class TicketAdapters extends RecyclerView.Adapter<TicketAdapters.ViewHold
 
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        public final TextView tvName,tvMobile,tvDescription,tvCategory,empName;
+        public final TextView tvName, tvMobile, tvDescription, tvCategory, empName, tvReffered, tvStatusVerifed, tvStatusNotVerifed, tvStatusBlocked;
         public final ImageView imgReplyIndicator;
 
         public ViewHolder(@NonNull View itemView) {
@@ -148,7 +193,11 @@ public class TicketAdapters extends RecyclerView.Adapter<TicketAdapters.ViewHold
             tvDescription = itemView.findViewById(R.id.tvDescription);
             tvCategory = itemView.findViewById(R.id.tvCategory);
             imgReplyIndicator = itemView.findViewById(R.id.imgReplyIndicator);
-            empName=itemView.findViewById(R.id.tvEmpName);
+            empName = itemView.findViewById(R.id.tvEmpName);
+            tvReffered = itemView.findViewById(R.id.tvRefferedBy);
+            tvStatusVerifed = itemView.findViewById(R.id.tvStatusVerified);
+            tvStatusNotVerifed = itemView.findViewById(R.id.tvStatusNotVerified);
+            tvStatusBlocked = itemView.findViewById(R.id.tvStatusBlocked);
 
 
         }
