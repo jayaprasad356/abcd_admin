@@ -698,13 +698,13 @@ public class Utils {
         return FirebaseDatabase.getInstance().getReference(CHAT_SUPPORT);
     }
     public static Query getJoiningTicket() {
-        return FirebaseDatabase.getInstance().getReference(JOINING_TICKET).orderByChild(TYPE).equalTo(JOINING_TICKET);
+        return FirebaseDatabase.getInstance().getReference(JOINING_TICKET).orderByChild(TIMESTAMP);
     }
     public static Query getFollowUpTicket() {
-        return FirebaseDatabase.getInstance().getReference(JOINING_TICKET).orderByChild(TYPE).equalTo(FOLLOWUP_TICKET);
+        return FirebaseDatabase.getInstance().getReference(JOINING_TICKET).orderByChild(TIMESTAMP);
     }
     public static Query geCloseJoining() {
-        return FirebaseDatabase.getInstance().getReference(JOINING_TICKET).orderByChild(TYPE).equalTo(CLOSED_JOINING);
+        return FirebaseDatabase.getInstance().getReference(JOINING_TICKET).orderByChild(TIMESTAMP);
     }
     public static Query getQueryPendingTicket() {
         return FirebaseDatabase.getInstance().getReference(PENDING_TICKET).orderByChild(TIMESTAMP);

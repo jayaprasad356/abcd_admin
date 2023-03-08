@@ -253,12 +253,20 @@ public class JoiningActivity extends AppCompatActivity implements PopupMenu.OnMe
                             if (type.equals(FOLLOWUP_TICKET) || type.equals(CLOSED_JOINING)) {
                                 if (session.getData(MOBILE).equals(user.getEmp_mobile())) {
                                     if (user.getSupport() != null && user.getSupport().equals(session.getData(ROLE))) {
-                                        mTickets.add(user);
+                                        if (type.equals(FOLLOWUP_TICKET)) {
+                                            if (user.getType().equals(FOLLOWUP_TICKET))
+                                                mTickets.add(user);
+                                        }else if (type.equals(CLOSED_JOINING)) {
+                                            if (user.getType().equals(CLOSED_JOINING))
+                                                mTickets.add(user);
+                                        }
                                     }
                                 }
                             } else {
                                 if (user.getSupport() != null && user.getSupport().equals(session.getData(ROLE))) {
-                                    mTickets.add(user);
+                                    if (user.getType().equals(JOINING_TICKET)) {
+                                        mTickets.add(user);
+                                    }
                                 }
                             }
                         }
@@ -302,7 +310,7 @@ public class JoiningActivity extends AppCompatActivity implements PopupMenu.OnMe
     }
 
     private void setAdatper() {
-        session.setBoolean(JOIN_CHAT,true);
+        session.setBoolean(JOIN_CHAT, true);
         mRecyclerView.setVisibility(View.VISIBLE);
         ticketAdapters = new TicketAdapters(activity, mTickets, type);
         mRecyclerView.setAdapter(ticketAdapters);
