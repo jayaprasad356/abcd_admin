@@ -139,6 +139,9 @@ public class TicketAdapters extends RecyclerView.Adapter<TicketAdapters.ViewHold
                         // Toast.makeText(mContext, "" + String.valueOf(jsonObject.getString("message")), Toast.LENGTH_SHORT).show();
                         JSONArray dataArray = jsonObject.getJSONArray("data");
                         JSONObject data = dataArray.getJSONObject(0);
+                        viewHolder.tvStatusVerifed.setVisibility(View.GONE);
+                        viewHolder.tvStatusNotVerifed.setVisibility(View.GONE);
+                        viewHolder.tvStatusBlocked.setVisibility(View.GONE);
 
                         String status = data.getString("status");
                         if (status.equals("1")) {
