@@ -12,6 +12,7 @@ import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.ImageView;
@@ -258,6 +259,7 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
     ImageView imgMobile;
     TextView tvInfo,tvRefferedBy;
     String emp_name,referredBy;
+    String Notifytype = "chat";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -1084,6 +1086,7 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
 
 
         if(TicketType.equals(JOINING_TICKET) || TicketType.equals(CLOSED_JOINING) || TicketType.equals(FOLLOWUP_TICKET)){
+            Notifytype = "join_chat";
             HashMap<String, Object> hashMap3 = new HashMap<>();
             hashMap3.put(REPLY, "false");
             reference.child(JOINING_TICKET).child(Mobile).updateChildren(hashMap3);
@@ -1158,14 +1161,12 @@ public class MessageActivity extends BaseActivity implements View.OnClickListene
     }
 
     private void sendNotification(String msg) {
+        Log.d("NOTIFY_REQ",msg +" - "+Notifytype+" - "+Mobile);
         Map<String, String> params = new HashMap<>();
         params.put(TITLE, "CHAT SUPPORT");
         params.put(DESCRIPTION, msg);
         params.put(MOBILE, Mobile);
-        if (session.getBoolean(JOIN_CHAT))
-            params.put(TYPE, JOIN_CHAT);
-        else
-            params.put(TYPE, "chat");
+        params.put(TYPE, Notifytype);
         ApiConfig.RequestToVolley((result, response) -> {
             if (result) {
                 try {
