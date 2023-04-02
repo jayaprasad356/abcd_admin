@@ -56,8 +56,8 @@ public interface IConstants {
 
 
     //String MainBaseUrl = "http://192.168.43.38/abcd/";
-    String MainBaseUrl = "https://appadmin.abcdapp.in/";
-    //String MainBaseUrl = "https://demoabcd.graymatterworks.com/";
+    //String MainBaseUrl = "https://appadmin.abcdapp.in/";
+    String MainBaseUrl = "https://demoabcd.graymatterworks.com/";
     String BaseUrl = MainBaseUrl + "api/";
     String EXTRA_SENDER = "sender";
     String EXTRA_RECEIVER = "receiver";

@@ -105,8 +105,13 @@ public class TicketAdapters extends RecyclerView.Adapter<TicketAdapters.ViewHold
             viewHolder.empName.setVisibility(View.GONE);
         }
 
-        if (ticket.getReply() != null && ticket.getReply().equals("true")) {
-            viewHolder.imgReplyIndicator.setVisibility(View.VISIBLE);
+        if (ticket.getReply() != null) {
+            if (ticket.getReply().equals("true")) {
+                viewHolder.imgReplyIndicator.setVisibility(View.VISIBLE);
+            }
+        }else {
+            viewHolder.imgReplyIndicator.setVisibility(View.GONE);
+
         }
         viewHolder.itemView.setOnClickListener(new SingleClickListener() {
             @Override
